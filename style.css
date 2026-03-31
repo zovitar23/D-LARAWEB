@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap');
+
     * {
     box-sizing: border-box;
 }
@@ -149,8 +151,13 @@ body {
     max-width: 760px;
     font-size: clamp(1.05rem, 2.2vw, 1.35rem);
     line-height: 1.9;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: 0.015em;
     color: #f8f2ff;
-    text-shadow: 0 0 18px rgba(255, 255, 255, 0.18);
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.12),
+        0 0 18px rgba(214, 173, 255, 0.08);
 }
 
 .stats-content {
