@@ -34,14 +34,14 @@ body {
 }
 
 .heart-rain span::before {
-    content: "♡";
+    content: "\2661";
     position: absolute;
     inset: 0;
     display: grid;
     place-items: center;
-    color: rgba(255, 176, 216, 0.22);
+    color: rgba(255, 176, 216, 0.3);
     font-size: clamp(1.8rem, 3vw, 3.1rem);
-    text-shadow: 0 0 10px rgba(255, 154, 205, 0.08);
+    text-shadow: 0 0 10px rgba(255, 154, 205, 0.12);
 }
 
 .heart-rain span:nth-child(1) { left: 8%; animation-duration: 46s; animation-delay: -6s; }
@@ -348,7 +348,7 @@ body {
         opacity: 0;
     }
     12% {
-        opacity: 0.18;
+        opacity: 0.26;
     }
     50% {
         transform: translate3d(14px, -42vh, 0) rotate(4deg) scale(1);
