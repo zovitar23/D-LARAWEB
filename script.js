@@ -6,10 +6,23 @@ function showStats() {
 
     if (hero) hero.style.display = 'none';
 
+    startSpotifyPlayer();
     statsSection.classList.remove('hidden');
     countTo(dayCountVisible, +dayCountVisible.getAttribute('data-target'));
     btn.setAttribute('disabled', 'true');
     btn.innerText = 'Kaydedildi';
+}
+
+function startSpotifyPlayer() {
+    const player = document.getElementById('spotifyPlayer');
+    if (!player) return;
+
+    if (!player.getAttribute('src')) {
+        player.setAttribute('src', player.dataset.src);
+    }
+
+    player.classList.remove('spotify-player-hidden');
+    player.classList.add('is-visible');
 }
 
 function countTo(element, target) {
