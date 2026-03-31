@@ -123,6 +123,10 @@ body {
     margin: 0 auto;
 }
 
+.message-content {
+    max-width: 860px;
+}
+
 .hero-content-simple h1,
 .result-text {
     font-size: clamp(2.6rem, 6vw, 4.2rem);
@@ -138,6 +142,15 @@ body {
 
 .hero-content-simple .btn {
     margin-top: 20px;
+}
+
+.message-text {
+    margin: 0 auto;
+    max-width: 760px;
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+    line-height: 1.9;
+    color: #f8f2ff;
+    text-shadow: 0 0 18px rgba(255, 255, 255, 0.18);
 }
 
 .stats-content {
