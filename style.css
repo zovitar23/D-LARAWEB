@@ -11,39 +11,41 @@ body {
     background: #120024;
     overflow-x: hidden;
     padding-bottom: 122px;
+    position: relative;
     animation: pageFade 1s ease both;
 }
 
 .heart-rain {
-    position: fixed;
+    position: absolute;
     inset: 0;
     pointer-events: none;
     overflow: hidden;
     z-index: 0;
+    opacity: 0.75;
 }
 
 .heart-rain span {
     position: absolute;
     bottom: -10vh;
-    color: rgba(255, 228, 241, 0.12);
-    text-shadow: 0 0 10px rgba(255, 190, 230, 0.08);
-    font-size: clamp(0.7rem, 1.1vw, 1.05rem);
-    filter: blur(0.2px);
+    color: rgba(255, 228, 241, 0.075);
+    text-shadow: 0 0 8px rgba(255, 190, 230, 0.05);
+    font-size: clamp(0.5rem, 0.9vw, 0.9rem);
+    filter: blur(0.6px);
     animation: floatHeart linear infinite;
 }
 
-.heart-rain span:nth-child(1) { left: 4%; animation-duration: 30s; animation-delay: -2s; }
-.heart-rain span:nth-child(2) { left: 12%; animation-duration: 35s; animation-delay: -9s; }
-.heart-rain span:nth-child(3) { left: 20%; animation-duration: 28s; animation-delay: -14s; }
-.heart-rain span:nth-child(4) { left: 29%; animation-duration: 38s; animation-delay: -5s; }
-.heart-rain span:nth-child(5) { left: 38%; animation-duration: 31s; animation-delay: -17s; }
-.heart-rain span:nth-child(6) { left: 46%; animation-duration: 36s; animation-delay: -11s; }
-.heart-rain span:nth-child(7) { left: 55%; animation-duration: 29s; animation-delay: -21s; }
-.heart-rain span:nth-child(8) { left: 63%; animation-duration: 40s; animation-delay: -7s; }
-.heart-rain span:nth-child(9) { left: 72%; animation-duration: 33s; animation-delay: -19s; }
-.heart-rain span:nth-child(10) { left: 81%; animation-duration: 37s; animation-delay: -13s; }
-.heart-rain span:nth-child(11) { left: 89%; animation-duration: 32s; animation-delay: -24s; }
-.heart-rain span:nth-child(12) { left: 96%; animation-duration: 41s; animation-delay: -16s; }
+.heart-rain span:nth-child(1) { left: 3%; animation-duration: 42s; animation-delay: -3s; }
+.heart-rain span:nth-child(2) { left: 10%; animation-duration: 48s; animation-delay: -16s; }
+.heart-rain span:nth-child(3) { left: 18%; animation-duration: 45s; animation-delay: -28s; }
+.heart-rain span:nth-child(4) { left: 27%; animation-duration: 52s; animation-delay: -9s; }
+.heart-rain span:nth-child(5) { left: 35%; animation-duration: 43s; animation-delay: -31s; }
+.heart-rain span:nth-child(6) { left: 44%; animation-duration: 50s; animation-delay: -20s; }
+.heart-rain span:nth-child(7) { left: 53%; animation-duration: 47s; animation-delay: -36s; }
+.heart-rain span:nth-child(8) { left: 61%; animation-duration: 55s; animation-delay: -12s; }
+.heart-rain span:nth-child(9) { left: 70%; animation-duration: 46s; animation-delay: -25s; }
+.heart-rain span:nth-child(10) { left: 79%; animation-duration: 53s; animation-delay: -40s; }
+.heart-rain span:nth-child(11) { left: 88%; animation-duration: 49s; animation-delay: -18s; }
+.heart-rain span:nth-child(12) { left: 95%; animation-duration: 58s; animation-delay: -33s; }
 
 .top-nav {
     position: fixed;
@@ -146,6 +148,7 @@ body {
     display: grid;
     place-items: center;
     padding-bottom: 122px;
+    position: relative;
     animation: pageFade 1s ease both;
 }
 
@@ -331,17 +334,17 @@ body {
 
 @keyframes floatHeart {
     0% {
-        transform: translate3d(0, 0, 0) rotate(0deg) scale(0.75);
+        transform: translate3d(0, 0, 0) rotate(0deg) scale(0.65);
         opacity: 0;
     }
-    12% {
-        opacity: 0.45;
+    18% {
+        opacity: 0.22;
     }
     50% {
-        transform: translate3d(12px, -45vh, 0) rotate(8deg) scale(0.9);
+        transform: translate3d(8px, -45vh, 0) rotate(6deg) scale(0.78);
     }
     100% {
-        transform: translate3d(-14px, -110vh, 0) rotate(-10deg) scale(0.78);
+        transform: translate3d(-10px, -110vh, 0) rotate(-7deg) scale(0.68);
         opacity: 0;
     }
 }
