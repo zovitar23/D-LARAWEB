@@ -25,20 +25,25 @@ body {
 .heart-rain span {
     position: absolute;
     bottom: -10vh;
-    color: rgba(255, 215, 236, 0.28);
-    text-shadow: 0 0 14px rgba(255, 182, 226, 0.2);
-    font-size: clamp(1rem, 2vw, 1.8rem);
+    color: rgba(255, 228, 241, 0.12);
+    text-shadow: 0 0 10px rgba(255, 190, 230, 0.08);
+    font-size: clamp(0.7rem, 1.1vw, 1.05rem);
+    filter: blur(0.2px);
     animation: floatHeart linear infinite;
 }
 
-.heart-rain span:nth-child(1) { left: 6%; animation-duration: 13s; animation-delay: -2s; }
-.heart-rain span:nth-child(2) { left: 18%; animation-duration: 17s; animation-delay: -7s; }
-.heart-rain span:nth-child(3) { left: 31%; animation-duration: 15s; animation-delay: -4s; }
-.heart-rain span:nth-child(4) { left: 46%; animation-duration: 18s; animation-delay: -10s; }
-.heart-rain span:nth-child(5) { left: 59%; animation-duration: 14s; animation-delay: -5s; }
-.heart-rain span:nth-child(6) { left: 72%; animation-duration: 19s; animation-delay: -12s; }
-.heart-rain span:nth-child(7) { left: 84%; animation-duration: 16s; animation-delay: -3s; }
-.heart-rain span:nth-child(8) { left: 93%; animation-duration: 20s; animation-delay: -9s; }
+.heart-rain span:nth-child(1) { left: 4%; animation-duration: 30s; animation-delay: -2s; }
+.heart-rain span:nth-child(2) { left: 12%; animation-duration: 35s; animation-delay: -9s; }
+.heart-rain span:nth-child(3) { left: 20%; animation-duration: 28s; animation-delay: -14s; }
+.heart-rain span:nth-child(4) { left: 29%; animation-duration: 38s; animation-delay: -5s; }
+.heart-rain span:nth-child(5) { left: 38%; animation-duration: 31s; animation-delay: -17s; }
+.heart-rain span:nth-child(6) { left: 46%; animation-duration: 36s; animation-delay: -11s; }
+.heart-rain span:nth-child(7) { left: 55%; animation-duration: 29s; animation-delay: -21s; }
+.heart-rain span:nth-child(8) { left: 63%; animation-duration: 40s; animation-delay: -7s; }
+.heart-rain span:nth-child(9) { left: 72%; animation-duration: 33s; animation-delay: -19s; }
+.heart-rain span:nth-child(10) { left: 81%; animation-duration: 37s; animation-delay: -13s; }
+.heart-rain span:nth-child(11) { left: 89%; animation-duration: 32s; animation-delay: -24s; }
+.heart-rain span:nth-child(12) { left: 96%; animation-duration: 41s; animation-delay: -16s; }
 
 .top-nav {
     position: fixed;
@@ -326,17 +331,17 @@ body {
 
 @keyframes floatHeart {
     0% {
-        transform: translate3d(0, 0, 0) rotate(0deg) scale(0.9);
+        transform: translate3d(0, 0, 0) rotate(0deg) scale(0.75);
         opacity: 0;
     }
-    15% {
-        opacity: 1;
+    12% {
+        opacity: 0.45;
     }
     50% {
-        transform: translate3d(18px, -45vh, 0) rotate(10deg) scale(1.05);
+        transform: translate3d(12px, -45vh, 0) rotate(8deg) scale(0.9);
     }
     100% {
-        transform: translate3d(-20px, -110vh, 0) rotate(-12deg) scale(0.95);
+        transform: translate3d(-14px, -110vh, 0) rotate(-10deg) scale(0.78);
         opacity: 0;
     }
 }
