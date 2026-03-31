@@ -1,4 +1,4 @@
-* {
+    * {
     box-sizing: border-box;
 }
 
@@ -99,6 +99,7 @@ body {
 
 .btn:hover {
     transform: translateY(-2px);
+    animation: pulse 1s infinite;
 }
 
 .stats-section {
@@ -242,17 +243,8 @@ footer {
     color: #a39bff;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.stats-section, .top-section, .memories {
-    animation: fadeInUp 1s ease-out;
+@keyframes pulse {
+    0% { box-shadow: 0 14px 26px rgba(65, 0, 129, 0.39); }
+    50% { box-shadow: 0 20px 40px rgba(65, 0, 129, 0.6); }
+    100% { box-shadow: 0 14px 26px rgba(65, 0, 129, 0.39); }
 }
