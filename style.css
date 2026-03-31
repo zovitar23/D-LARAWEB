@@ -123,10 +123,17 @@ body {
     margin: 0 auto;
 }
 
-.hero-content-simple h1 {
+.hero-content-simple h1,
+.result-text {
     font-size: clamp(2.6rem, 6vw, 4.2rem);
-    margin-bottom: 30px;
     letter-spacing: 0.02em;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.hero-content-simple h1 {
+    margin-bottom: 30px;
 }
 
 .hero-content-simple .btn {
@@ -140,9 +147,7 @@ body {
 }
 
 .result-text {
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    color: #f7effd;
-    text-shadow: 0 0 18px rgba(255,255,255,0.18);
+    margin: 0;
 }
 
 .big-number {

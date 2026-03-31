@@ -1,7 +1,7 @@
 function showStats() {
     const statsSection = document.getElementById('stats');
     const dayCountVisible = document.getElementById('dayCountVisible');
-    const btn = document.getElementById('keşfetBtn');
+    const btn = document.getElementById('kesfetBtn');
     const hero = document.getElementById('startSection');
 
     if (hero) hero.style.display = 'none';
