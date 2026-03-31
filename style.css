@@ -146,6 +146,10 @@ body {
     justify-items: center;
 }
 
+.stats-btn {
+    margin-top: 6px;
+}
+
 .result-text {
     margin: 0;
 }
