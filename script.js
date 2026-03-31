@@ -1,22 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const counters = document.querySelectorAll('.number');
-    const speed = 200; // The lower the slower
+    const keşfetBtn = document.getElementById('keşfetBtn');
+    const statsSection = document.getElementById('stats');
+    const dayCounter = document.getElementById('dayCount');
 
-    counters.forEach(counter => {
-        const updateCount = () => {
-            const target = +counter.getAttribute('data-target');
-            const count = +counter.innerText;
+    const countTo = (element, target) => {
+        const duration = 1200;
+        const frameTime = 20;
+        let current = 0;
+        const increment = Math.ceil(target / (duration / frameTime));
 
-            const inc = target / speed;
-
-            if (count < target) {
-                counter.innerText = Math.ceil(count + inc);
-                setTimeout(updateCount, 1);
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.innerText = target;
+                clearInterval(timer);
+                element.classList.add('animated');
             } else {
-                counter.innerText = target;
+                element.innerText = current;
             }
-        };
+        }, frameTime);
+    };
 
-        updateCount();
+    keşfetBtn.addEventListener('click', () => {
+        statsSection.classList.remove('hidden');
+        countTo(dayCounter, +dayCounter.getAttribute('data-target'));
+        keşfetBtn.setAttribute('disabled', 'true');
+        keşfetBtn.innerText = 'Kaydedildi';
     });
 });

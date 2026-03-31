@@ -9,86 +9,24 @@
 <body>
     <header class="top-nav">
         <div class="logo">wrapped</div>
-        <nav>
-            <a href="index.html">Ana Sayfa</a>
-            <a href="about.html">Hakkında</a>
-        </nav>
     </header>
 
     <section class="hero">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <h1>Selam Dilara!</h1>
-            <p>Arkadaşım Dilara için özel hazırlanan arkadaşlık ve anı analiz sitesi.</p>
-            <a class="btn" href="about.html">Keşfet</a>
+            <p>Tanışma gün sayısına birlikte bakalım.</p>
+            <button class="btn" id="keşfetBtn">Keşfet</button>
         </div>
     </section>
 
-    <section id="stats" class="stats-section">
-        <h2>İstatistiklerin</h2>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Gün Sayısı</h3>
-                <div class="number" data-target="245">0</div>
-                <p>Arkadaş olduğumuz gün</p>
-            </div>
-            <div class="stat-card">
-                <h3>Mesaj Sayısı</h3>
-                <div class="number" data-target="1247">0</div>
-                <p>Gönderdiğimiz mesaj</p>
-            </div>
-            <div class="stat-card">
-                <h3>Gülümseme</h3>
-                <div class="number" data-target="89">0</div>
-                <p>Güldüğümüz an</p>
-            </div>
-            <div class="stat-card">
-                <h3>Kucaklaşma</h3>
-                <div class="number" data-target="156">0</div>
-                <p>Kucaklaştığımız an</p>
-            </div>
+    <section id="stats" class="stats-section hidden">
+        <h2>Tanıştığımız Gün Sayısı</h2>
+        <div class="stat-card single">
+            <div class="number" id="dayCount" data-target="245">0</div>
+            <p>Gün sayısı</p>
         </div>
     </section>
-
-    <section class="top-section">
-        <h2>Dilara'nın En Sevdiği Şeyler</h2>
-        <div class="top-grid">
-            <div class="top-item">
-                <h3>En Sevdiği Renk</h3>
-                <p>Mor</p>
-            </div>
-            <div class="top-item">
-                <h3>En Sevdiği Aktivite</h3>
-                <p>Konuşmak ve gülmek</p>
-            </div>
-            <div class="top-item">
-                <h3>En Sevdiği Yemek</h3>
-                <p>Çikolata</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="memories">
-        <h2>Anılarımız</h2>
-        <div class="memory-cards">
-            <div class="memory-card">
-                <h4>İlk Tanışma</h4>
-                <p>O gün arkadaşlığımız başladı...</p>
-            </div>
-            <div class="memory-card">
-                <h4>Güzel Sohbetler</h4>
-                <p>Saatlerce konuştuğumuz anlar...</p>
-            </div>
-            <div class="memory-card">
-                <h4>Gelecek Planları</h4>
-                <p>Beraber yapacağımız şeyler...</p>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <p>Arkadaşım Dilara için ❤️</p>
-    </footer>
 
     <script src="script.js"></script>
 </body>
