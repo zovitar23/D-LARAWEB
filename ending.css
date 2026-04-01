@@ -323,7 +323,7 @@ body {
     opacity: 1;
 }
 
-.ending-quote.is-visible .ending-quote__screen {
+.ending-quote.is-visible .ending-quote__screen:not(.ending-quote__screen--light) {
     opacity: 1;
 }
 
