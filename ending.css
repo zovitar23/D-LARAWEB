@@ -367,9 +367,9 @@ body {
     pointer-events: none;
     transition: opacity 0.8s ease;
     background:
-        radial-gradient(circle at 50% 45%, rgba(173, 106, 255, 0.18), transparent 18%),
-        radial-gradient(circle at 50% 50%, rgba(88, 30, 190, 0.22), transparent 42%),
-        linear-gradient(180deg, #080210 0%, #140326 42%, #250548 100%);
+        radial-gradient(circle at 50% 45%, rgba(124, 63, 220, 0.12), transparent 14%),
+        radial-gradient(circle at 50% 50%, rgba(56, 16, 126, 0.18), transparent 38%),
+        linear-gradient(180deg, #030108 0%, #090113 34%, #140223 68%, #210439 100%);
 }
 
 .ending-space.is-visible {
@@ -391,15 +391,17 @@ body {
 
 .ending-space__glow {
     background:
-        radial-gradient(circle at center, rgba(216, 173, 255, 0.12), transparent 14%),
-        radial-gradient(circle at center, rgba(92, 36, 188, 0.16), transparent 36%);
+        radial-gradient(circle at 50% 50%, rgba(196, 155, 255, 0.08), transparent 10%),
+        radial-gradient(circle at 50% 50%, rgba(86, 32, 186, 0.12), transparent 32%);
     pointer-events: none;
+    mix-blend-mode: screen;
 }
 
 .ending-space__camera {
     transform-style: preserve-3d;
-    perspective: 1600px;
-    transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    perspective: 1800px;
+    perspective-origin: 50% 50%;
+    transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: transform;
 }
 
@@ -407,23 +409,23 @@ body {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: min(34vw, 440px);
-    max-width: 440px;
+    width: min(36vw, 500px);
+    max-width: 500px;
     transform: translate3d(-50%, -50%, -120px) rotateY(0deg) rotateX(0deg) scale(0.72);
     transform-style: preserve-3d;
     text-align: left;
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(1.5rem, 2.8vw, 2.9rem);
-    line-height: 1.22;
+    font-size: clamp(1.6rem, 2.9vw, 3.1rem);
+    line-height: 1.18;
     font-weight: 600;
     letter-spacing: 0.01em;
-    color: #fff7ff;
+    color: #fff9ff;
     text-shadow:
-        0 0 12px rgba(255, 255, 255, 0.16),
-        0 0 28px rgba(187, 137, 255, 0.16);
+        0 0 14px rgba(255, 255, 255, 0.18),
+        0 0 36px rgba(187, 137, 255, 0.2);
     opacity: 0;
-    filter: blur(6px);
-    transition: opacity 0.65s ease, transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.65s ease;
+    filter: blur(8px);
+    transition: opacity 0.65s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.65s ease;
     will-change: transform, opacity, filter;
 }
 
@@ -434,10 +436,12 @@ body {
 
 .ending-space__phrase.is-left {
     text-align: left;
+    transform-origin: left center;
 }
 
 .ending-space__phrase.is-right {
     text-align: right;
+    transform-origin: right center;
 }
 
 .ending-space__phrase.is-exiting-left {
