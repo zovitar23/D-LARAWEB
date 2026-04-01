@@ -64,7 +64,8 @@ body {
 
 .ending-reveal {
     z-index: 4;
-    display: block;
+    display: grid;
+    place-items: center;
     opacity: 0;
     pointer-events: none;
     transition: opacity 1s ease;
@@ -81,12 +82,22 @@ body {
     transition: opacity 1.4s ease;
 }
 
+.ending-reveal__content {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 24px;
+    width: min(92vw, 980px);
+    padding: 0 20px;
+}
+
 .ending-reveal__frame {
-    position: absolute;
-    inset: 0;
+    position: relative;
+    width: min(92vw, 820px);
+    border-radius: 28px;
     overflow: hidden;
     clip-path: circle(2.6% at 50% 50%);
-    transform: scale(1.38) translateZ(0);
+    transform: scale(0.18) translateZ(0);
     transform-origin: 50% 50%;
     opacity: 0;
     filter: blur(16px) saturate(1.04) brightness(0.9);
@@ -102,9 +113,9 @@ body {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at center, rgba(255, 245, 252, 0.22), rgba(181, 112, 255, 0.16) 18%, rgba(91, 32, 177, 0.08) 32%, transparent 46%),
-        radial-gradient(circle at center, transparent 0 42%, rgba(6, 2, 18, 0.16) 68%, rgba(6, 2, 18, 0.5) 100%);
-    opacity: 0.9;
+        radial-gradient(circle at center, rgba(255, 245, 252, 0.14), rgba(181, 112, 255, 0.1) 18%, rgba(91, 32, 177, 0.06) 32%, transparent 46%),
+        radial-gradient(circle at center, transparent 0 54%, rgba(6, 2, 18, 0.1) 76%, rgba(6, 2, 18, 0.24) 100%);
+    opacity: 0.68;
     transform: scale(1);
     transition: opacity 1.4s ease, transform 5.2s ease;
     pointer-events: none;
@@ -114,12 +125,32 @@ body {
 .ending-reveal__image {
     display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
     object-position: center;
     filter: saturate(1.02) brightness(0.9);
     transform: scale(1.06);
     transition: transform 5.2s cubic-bezier(0.12, 0.8, 0.2, 1), filter 5.2s ease;
+    -webkit-mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
+    mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
+}
+
+.ending-reveal__caption {
+    margin: 0;
+    max-width: 760px;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    line-height: 1.8;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+    color: #f8f2ff;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(18px);
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.12),
+        0 0 18px rgba(214, 173, 255, 0.08);
+    transition: opacity 1.2s ease, transform 1.4s ease;
 }
 
 .ending-reveal.is-target {
@@ -131,8 +162,8 @@ body {
 }
 
 .ending-reveal.is-target .ending-reveal__frame {
-    clip-path: circle(7% at 50% 50%);
-    transform: scale(1.24);
+    clip-path: circle(10% at 50% 50%);
+    transform: scale(0.28);
     opacity: 0.66;
     filter: blur(10px) saturate(1.02) brightness(0.9);
 }
@@ -151,7 +182,7 @@ body {
 }
 
 .ending-reveal.is-arrived .ending-reveal__frame {
-    clip-path: circle(76% at 50% 50%);
+    clip-path: inset(0 round 28px);
     transform: scale(1);
     opacity: 1;
     filter: blur(0) saturate(1);
@@ -165,6 +196,11 @@ body {
 .ending-reveal.is-arrived .ending-reveal__image {
     transform: scale(1);
     filter: saturate(1.02) brightness(0.96);
+}
+
+.ending-reveal.is-arrived .ending-reveal__caption {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .arrival-gate::before {
