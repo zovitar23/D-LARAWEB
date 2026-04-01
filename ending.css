@@ -367,52 +367,31 @@ body {
     pointer-events: none;
     transition: opacity 0.8s ease;
     background:
-        radial-gradient(circle at 50% 45%, rgba(124, 63, 220, 0.12), transparent 14%),
-        radial-gradient(circle at 50% 50%, rgba(56, 16, 126, 0.18), transparent 38%),
-        linear-gradient(180deg, #030108 0%, #090113 34%, #140223 68%, #210439 100%);
+        radial-gradient(circle at 50% 38%, rgba(118, 63, 214, 0.18), transparent 18%),
+        linear-gradient(180deg, #05010a 0%, #10021c 45%, #210438 100%);
 }
 
 .ending-space.is-visible {
     opacity: 1;
 }
 
-.ending-space__canvas,
-.ending-space__glow,
 .ending-space__camera {
     position: absolute;
     inset: 0;
 }
 
-.ending-space__canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.ending-space__glow {
-    background:
-        radial-gradient(circle at 50% 50%, rgba(196, 155, 255, 0.08), transparent 10%),
-        radial-gradient(circle at 50% 50%, rgba(86, 32, 186, 0.12), transparent 32%);
-    pointer-events: none;
-    mix-blend-mode: screen;
-}
-
 .ending-space__camera {
-    transform-style: preserve-3d;
-    perspective: 1800px;
-    perspective-origin: 50% 50%;
-    transition: transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: transform;
+    display: grid;
+    place-items: center;
 }
 
 .ending-space__phrase {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: min(36vw, 500px);
-    max-width: 500px;
-    transform: translate3d(-50%, -50%, -120px) rotateY(0deg) rotateX(0deg) scale(0.72);
-    transform-style: preserve-3d;
+    width: min(40vw, 560px);
+    max-width: 560px;
+    transform: translate(-50%, -50%) scale(0.94);
     text-align: left;
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(1.6rem, 2.9vw, 3.1rem);
@@ -420,14 +399,11 @@ body {
     font-weight: 600;
     letter-spacing: 0.01em;
     color: #fff9ff;
-    text-shadow:
-        0 0 4px rgba(255, 255, 255, 0.08),
-        0 0 12px rgba(187, 137, 255, 0.08);
+    text-shadow: none;
     opacity: 0;
-    filter: blur(8px);
-    transition: opacity 0.65s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.65s ease;
+    filter: blur(10px);
+    transition: opacity 0.55s ease, transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.55s ease;
     will-change: transform, opacity, filter;
-    backface-visibility: hidden;
     -webkit-font-smoothing: antialiased;
     text-rendering: geometricPrecision;
 }
