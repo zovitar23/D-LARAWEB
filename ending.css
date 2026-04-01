@@ -421,12 +421,15 @@ body {
     letter-spacing: 0.01em;
     color: #fff9ff;
     text-shadow:
-        0 0 14px rgba(255, 255, 255, 0.18),
-        0 0 36px rgba(187, 137, 255, 0.2);
+        0 0 4px rgba(255, 255, 255, 0.08),
+        0 0 12px rgba(187, 137, 255, 0.08);
     opacity: 0;
     filter: blur(8px);
     transition: opacity 0.65s ease, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.65s ease;
     will-change: transform, opacity, filter;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
 }
 
 .ending-space__phrase.is-visible {
