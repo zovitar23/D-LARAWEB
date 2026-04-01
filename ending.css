@@ -10,8 +10,8 @@ body {
     min-height: 100%;
     overflow: hidden;
     background:
-        radial-gradient(circle at 50% 52%, rgba(158, 88, 255, 0.24), transparent 24%),
-        radial-gradient(circle at 50% 50%, rgba(255, 140, 230, 0.12), transparent 18%),
+        radial-gradient(circle at 50% 52%, rgba(112, 62, 210, 0.18), transparent 20%),
+        radial-gradient(circle at 50% 50%, rgba(255, 140, 230, 0.08), transparent 14%),
         linear-gradient(180deg, #03010b 0%, #10021d 35%, #220439 100%);
     font-family: 'Sora', sans-serif;
     color: #fff;
@@ -40,7 +40,7 @@ body {
 
 .vignette {
     background:
-        radial-gradient(circle at center, transparent 0 30%, rgba(7, 2, 18, 0.18) 50%, rgba(3, 1, 12, 0.78) 100%),
+        radial-gradient(circle at center, transparent 0 14%, rgba(7, 2, 18, 0.12) 34%, rgba(3, 1, 12, 0.82) 100%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.02));
     z-index: 2;
     pointer-events: none;
@@ -63,18 +63,18 @@ body {
 
 .arrival-gate::before {
     content: "";
-    width: min(54vw, 420px);
+    width: min(44vw, 320px);
     aspect-ratio: 1;
     border-radius: 50%;
     background:
-        radial-gradient(circle, rgba(255, 245, 252, 0.98) 0 12%, rgba(255, 181, 242, 0.64) 22%, rgba(173, 101, 255, 0.28) 44%, rgba(83, 26, 151, 0.08) 62%, transparent 72%);
-    filter: blur(2px);
+        radial-gradient(circle, rgba(255, 255, 255, 0) 0 56%, rgba(255, 222, 248, 0.08) 63%, rgba(203, 151, 255, 0.3) 71%, rgba(119, 58, 222, 0.18) 78%, rgba(83, 26, 151, 0.06) 86%, transparent 100%);
+    filter: blur(10px);
     box-shadow:
-        0 0 40px rgba(255, 187, 239, 0.24),
-        0 0 140px rgba(144, 84, 255, 0.18);
-    transform: scale(0.7);
+        0 0 28px rgba(255, 187, 239, 0.08),
+        0 0 96px rgba(144, 84, 255, 0.12);
+    transform: scale(0.76);
     transition: transform 1.8s ease, opacity 1.6s ease;
-    opacity: 0.85;
+    opacity: 0.7;
 }
 
 .arrival-gate.is-near {
@@ -90,7 +90,7 @@ body {
 }
 
 .arrival-gate.is-arrived::before {
-    transform: scale(1.18);
+    transform: scale(1.08);
     opacity: 1;
 }
 
@@ -100,10 +100,10 @@ body {
     top: 0;
     white-space: nowrap;
     font-family: 'Cormorant Garamond', serif;
-    color: rgba(255, 236, 249, 0.92);
+    color: rgba(255, 236, 249, 0.7);
     text-shadow:
-        0 0 14px rgba(255, 168, 234, 0.28),
-        0 0 28px rgba(185, 133, 255, 0.18);
+        0 0 10px rgba(255, 168, 234, 0.14),
+        0 0 20px rgba(185, 133, 255, 0.1);
     opacity: 0;
     will-change: transform, opacity;
 }
@@ -111,9 +111,9 @@ body {
 .ending-copy {
     z-index: 4;
     display: grid;
-    place-items: center;
+    place-items: start center;
     text-align: center;
-    padding: 24px;
+    padding: 12vh 24px 24px;
     pointer-events: none;
 }
 
@@ -124,38 +124,15 @@ body {
 }
 
 .ending-kicker {
-    margin: 0 0 14px;
+    margin: 0 0 10px;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     font-size: 0.82rem;
     color: rgba(255, 225, 246, 0.72);
 }
 
-.ending-copy h1 {
-    margin: 0;
-    font-size: clamp(3.2rem, 10vw, 7.2rem);
-    line-height: 0.95;
-    letter-spacing: 0.04em;
-    text-shadow:
-        0 0 22px rgba(255, 180, 242, 0.4),
-        0 0 52px rgba(152, 104, 255, 0.24);
-    animation: titlePulse 6s ease-in-out infinite;
-}
-
 .ending-note {
-    margin: 18px 0 0;
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: rgba(245, 232, 255, 0.78);
-}
-
-@keyframes titlePulse {
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 0.92;
-    }
-    50% {
-        transform: scale(1.03);
-        opacity: 1;
-    }
+    margin: 0;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    color: rgba(245, 232, 255, 0.58);
 }
