@@ -68,7 +68,7 @@ body {
     place-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 1.2s ease;
+    transition: opacity 1s ease;
 }
 
 .ending-reveal::before {
@@ -84,24 +84,24 @@ body {
 
 .ending-reveal__frame {
     position: relative;
-    width: min(72vw, 680px);
+    width: min(58vw, 540px);
     aspect-ratio: 1.45;
-    border-radius: 36px;
+    border-radius: 28px;
     overflow: hidden;
-    clip-path: circle(4.5% at 50% 50%);
+    clip-path: circle(10% at 50% 50%);
     box-shadow:
-        0 0 28px rgba(194, 133, 255, 0.16),
-        0 24px 90px rgba(0, 0, 0, 0.38);
-    transform: scale(0.16) translateZ(0);
+        0 0 18px rgba(194, 133, 255, 0.12),
+        0 0 70px rgba(0, 0, 0, 0.24);
+    transform: scale(0.06) translateZ(0);
     transform-origin: 50% 50%;
     opacity: 0;
-    filter: blur(18px) saturate(1.12);
+    filter: blur(14px) saturate(1.08);
     transition:
-        clip-path 2.4s cubic-bezier(0.18, 0.78, 0.2, 1),
-        transform 2.2s cubic-bezier(0.18, 0.78, 0.2, 1),
-        opacity 1.4s ease,
-        filter 2.1s ease,
-        box-shadow 2.1s ease;
+        clip-path 4.8s cubic-bezier(0.12, 0.8, 0.2, 1),
+        transform 4.8s cubic-bezier(0.12, 0.8, 0.2, 1),
+        opacity 1.2s ease,
+        filter 4.8s ease,
+        box-shadow 4.8s ease;
 }
 
 .ending-reveal__frame::before {
@@ -110,9 +110,9 @@ body {
     inset: -8%;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(255, 238, 250, 0.26) 0, rgba(180, 114, 255, 0.22) 22%, rgba(91, 32, 177, 0.12) 42%, transparent 72%);
-    opacity: 0.9;
+    opacity: 0.82;
     transform: scale(1.08);
-    transition: opacity 1.4s ease, transform 2s ease;
+    transition: opacity 1.4s ease, transform 4.8s ease;
     pointer-events: none;
     mix-blend-mode: screen;
 }
@@ -122,20 +122,43 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: saturate(1.04) brightness(0.98);
-    transform: scale(1.1);
-    transition: transform 2.4s cubic-bezier(0.18, 0.78, 0.2, 1);
+    filter: saturate(1.02) brightness(0.94);
+    transform: scale(1.18);
+    transition: transform 4.8s cubic-bezier(0.12, 0.8, 0.2, 1), filter 4.8s ease;
 }
 
-.ending-reveal.is-visible {
+.ending-reveal.is-target {
     opacity: 1;
 }
 
-.ending-reveal.is-visible::before {
-    opacity: 1;
+.ending-reveal.is-target::before {
+    opacity: 0.62;
 }
 
-.ending-reveal.is-visible .ending-reveal__frame {
+.ending-reveal.is-target .ending-reveal__frame {
+    clip-path: circle(17% at 50% 50%);
+    transform: scale(0.18);
+    opacity: 0.82;
+    filter: blur(8px) saturate(1.02);
+    box-shadow:
+        0 0 22px rgba(194, 133, 255, 0.14),
+        0 0 90px rgba(99, 47, 182, 0.18);
+}
+
+.ending-reveal.is-target .ending-reveal__frame::before {
+    opacity: 0.48;
+    transform: scale(1.4);
+}
+
+.ending-reveal.is-target .ending-reveal__image {
+    transform: scale(1.12);
+}
+
+.ending-reveal.is-arrived::before {
+    opacity: 0.88;
+}
+
+.ending-reveal.is-arrived .ending-reveal__frame {
     clip-path: circle(74% at 50% 50%);
     transform: scale(1);
     opacity: 1;
@@ -145,13 +168,14 @@ body {
         0 30px 120px rgba(0, 0, 0, 0.42);
 }
 
-.ending-reveal.is-visible .ending-reveal__frame::before {
-    opacity: 0.24;
-    transform: scale(1.65);
+.ending-reveal.is-arrived .ending-reveal__frame::before {
+    opacity: 0.2;
+    transform: scale(1.9);
 }
 
-.ending-reveal.is-visible .ending-reveal__image {
+.ending-reveal.is-arrived .ending-reveal__image {
     transform: scale(1);
+    filter: saturate(1.02) brightness(0.98);
 }
 
 .arrival-gate::before {

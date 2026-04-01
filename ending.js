@@ -85,25 +85,25 @@ function drawBackgroundGlow(progress) {
     ctx.fillRect(0, 0, width, height);
 }
 
-function drawWarpRings(progress, elapsed) {
+function drawWarpRings(progress, elapsed, rushPhase) {
     for (const ring of warpRings) {
-        ring.z -= ring.speed + progress * 0.004;
+        ring.z -= ring.speed + progress * 0.004 + rushPhase * 0.03;
         if (ring.z <= 0.035) {
             Object.assign(ring, createWarpRing(1));
         }
 
         const depth = 1 - ring.z;
         const perspective = 1 / Math.max(ring.z, 0.08);
-        const radius = Math.min(width, height) * 0.08 * perspective;
-        const alpha = Math.min(0.2, 0.02 + depth * 0.1);
-        const flatten = 0.9 + Math.sin(elapsed * 0.26 + ring.wobble) * 0.012;
+        const radius = Math.min(width, height) * (0.08 + rushPhase * 0.04) * perspective;
+        const alpha = Math.min(0.34, 0.02 + depth * 0.1 + rushPhase * 0.12);
+        const flatten = 0.9 + Math.sin(elapsed * 0.26 + ring.wobble) * (0.012 + rushPhase * 0.016);
 
         ctx.save();
         ctx.translate(centerX, centerY);
         ctx.beginPath();
-        ctx.lineWidth = 0.8 + depth * 0.9;
+        ctx.lineWidth = 0.8 + depth * 0.9 + rushPhase * 0.8;
         ctx.strokeStyle = `rgba(236, 221, 255, ${alpha})`;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 8 + rushPhase * 12;
         ctx.shadowColor = `rgba(189, 132, 255, ${alpha * 0.55})`;
         ctx.ellipse(0, 0, radius, radius * flatten, 0, 0, Math.PI * 2);
         ctx.stroke();
@@ -113,11 +113,11 @@ function drawWarpRings(progress, elapsed) {
     ctx.shadowBlur = 0;
 }
 
-function drawWarpLines(progress) {
-    const innerVoid = Math.min(width, height) * (0.12 + progress * 0.025);
+function drawWarpLines(progress, rushPhase) {
+    const innerVoid = Math.min(width, height) * (0.12 + progress * 0.025 - rushPhase * 0.05);
 
     for (const line of warpLines) {
-        line.z -= line.speed + progress * 0.003;
+        line.z -= line.speed + progress * 0.003 + rushPhase * 0.042;
         if (line.z <= 0.02) {
             Object.assign(line, createWarpLine(1));
         }
@@ -125,17 +125,17 @@ function drawWarpLines(progress) {
         const depth = 1 - line.z;
         const perspective = 1 / Math.max(line.z, 0.06);
         const startRadius = innerVoid * (1.04 + line.z * 0.16) * line.spread;
-        const endRadius = startRadius * perspective * (1.3 + progress * 0.42);
+        const endRadius = startRadius * perspective * (1.3 + progress * 0.42 + rushPhase * 1.3);
         const x1 = centerX + Math.cos(line.angle) * startRadius;
         const y1 = centerY + Math.sin(line.angle) * startRadius * 0.96;
         const x2 = centerX + Math.cos(line.angle) * endRadius;
         const y2 = centerY + Math.sin(line.angle) * endRadius * 0.96;
-        const alpha = Math.min(0.56, 0.035 + depth * 0.38);
+        const alpha = Math.min(0.9, 0.035 + depth * 0.38 + rushPhase * 0.24);
 
         ctx.beginPath();
-        ctx.lineWidth = line.thickness * (0.3 + depth * 0.6);
+        ctx.lineWidth = line.thickness * (0.3 + depth * 0.6 + rushPhase * 0.65);
         ctx.strokeStyle = `hsla(${line.hue}, 100%, 80%, ${alpha})`;
-        ctx.shadowBlur = 8 + depth * 10;
+        ctx.shadowBlur = 8 + depth * 10 + rushPhase * 18;
         ctx.shadowColor = `hsla(${line.hue}, 100%, 72%, ${alpha * 0.65})`;
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
@@ -145,20 +145,20 @@ function drawWarpLines(progress) {
     ctx.shadowBlur = 0;
 }
 
-function drawCenterVoid(progress) {
-    const voidRadius = Math.min(width, height) * 0.13;
+function drawCenterVoid(progress, rushPhase) {
+    const voidRadius = Math.min(width, height) * (0.13 - rushPhase * 0.05);
     const aura = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, voidRadius * 2.2);
     aura.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    aura.addColorStop(0.24, `rgba(173, 112, 255, ${0.12 + progress * 0.03})`);
-    aura.addColorStop(0.48, 'rgba(89, 34, 169, 0.12)');
+    aura.addColorStop(0.24, `rgba(173, 112, 255, ${0.12 + progress * 0.03 + rushPhase * 0.16})`);
+    aura.addColorStop(0.48, `rgba(89, 34, 169, ${0.12 + rushPhase * 0.08})`);
     aura.addColorStop(1, 'rgba(89, 34, 169, 0)');
     ctx.fillStyle = aura;
     ctx.fillRect(0, 0, width, height);
 
     ctx.beginPath();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = `rgba(237, 215, 255, ${0.16 + progress * 0.05})`;
-    ctx.shadowBlur = 18;
+    ctx.lineWidth = 2 + rushPhase * 1.6;
+    ctx.strokeStyle = `rgba(237, 215, 255, ${0.16 + progress * 0.05 + rushPhase * 0.22})`;
+    ctx.shadowBlur = 18 + rushPhase * 18;
     ctx.shadowColor = 'rgba(191, 132, 255, 0.2)';
     ctx.arc(centerX, centerY, voidRadius * 0.94, 0, Math.PI * 2);
     ctx.stroke();
@@ -178,31 +178,36 @@ function drawCenterVoid(progress) {
 function drawTunnel(now) {
     const elapsed = (now - animationStart) / 1000;
     const progress = Math.min(elapsed / JOURNEY_DURATION, 1);
+    const rushPhase = Math.max(0, Math.min((elapsed - REVEAL_TIME) / (JOURNEY_DURATION - REVEAL_TIME), 1));
 
     ctx.clearRect(0, 0, width, height);
     bootstrapScene();
     drawBackgroundGlow(progress);
-    drawWarpRings(progress, elapsed);
-    drawWarpLines(progress);
-    drawCenterVoid(progress);
+    drawWarpRings(progress, elapsed, rushPhase);
+    drawWarpLines(progress, rushPhase);
+    drawCenterVoid(progress, rushPhase);
 
     if (progress > 0.72) {
         arrivalGate.classList.add('is-near');
         endingCopy.classList.add('is-arriving');
     }
 
+    if (elapsed >= REVEAL_TIME && !endingReveal.classList.contains('is-target')) {
+        endingReveal.classList.add('is-target');
+    }
+
     if (progress > 0.95) {
         arrivalGate.classList.add('is-arrived');
     }
 
-    if (!hasRevealed && elapsed >= REVEAL_TIME) {
+    if (!hasRevealed && progress >= 1) {
         hasRevealed = true;
         if (wordIntervalId) {
             clearInterval(wordIntervalId);
         }
         endingPage.classList.add('is-ended');
         endingCopy.classList.add('is-hidden');
-        endingReveal.classList.add('is-visible');
+        endingReveal.classList.add('is-arrived');
         return;
     }
 
