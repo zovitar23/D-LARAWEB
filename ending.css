@@ -136,6 +136,8 @@ body {
 }
 
 .ending-reveal__caption {
+    position: relative;
+    z-index: 1;
     margin: 0;
     max-width: 760px;
     font-size: clamp(1rem, 2vw, 1.3rem);
@@ -150,6 +152,10 @@ body {
     text-shadow:
         0 0 10px rgba(255, 255, 255, 0.12),
         0 0 18px rgba(214, 173, 255, 0.08);
+    background: linear-gradient(180deg, rgba(33, 7, 63, 0.94), rgba(48, 10, 92, 0.9));
+    padding: 10px 22px;
+    border-radius: 999px;
+    box-shadow: 0 8px 26px rgba(12, 0, 28, 0.16);
     transition: opacity 1.2s ease, transform 1.4s ease;
 }
 
