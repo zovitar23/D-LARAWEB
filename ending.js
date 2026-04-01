@@ -242,29 +242,33 @@ function drawCenterVoid(progress, rushPhase) {
     ctx.fill();
 }
 
+function drawPreludeAtmosphere(elapsed, progress) {
+    const pulse = (Math.sin(elapsed * 1.1) + 1) * 0.5;
+    const orbX = centerX + Math.cos(elapsed * 0.28) * width * 0.06;
+    const orbY = centerY + Math.sin(elapsed * 0.24) * height * 0.04;
+    const aura = ctx.createRadialGradient(orbX, orbY, 0, orbX, orbY, Math.max(width, height) * 0.36);
+    aura.addColorStop(0, `rgba(170, 106, 255, ${0.12 + pulse * 0.08})`);
+    aura.addColorStop(0.32, `rgba(118, 56, 216, ${0.09 + progress * 0.04})`);
+    aura.addColorStop(0.72, 'rgba(54, 15, 118, 0.04)');
+    aura.addColorStop(1, 'rgba(54, 15, 118, 0)');
+    ctx.fillStyle = aura;
+    ctx.fillRect(0, 0, width, height);
+}
+
 function drawTunnel(now) {
     const elapsed = (now - animationStart) / 1000;
     const progress = Math.min(elapsed / JOURNEY_DURATION, 1);
-    const rushPhase = Math.max(0, Math.min((elapsed - REVEAL_TIME) / (JOURNEY_DURATION - REVEAL_TIME), 1));
 
     ctx.clearRect(0, 0, width, height);
-    bootstrapScene();
     drawBackgroundGlow(progress);
-    drawWarpRings(progress, elapsed, rushPhase);
-    drawWarpLines(progress, rushPhase);
-    drawCenterVoid(progress, rushPhase);
+    drawPreludeAtmosphere(elapsed, progress);
 
     if (progress > 0.45) {
-        arrivalGate.classList.add('is-near');
         endingCopy.classList.add('is-arriving');
     }
 
     if (elapsed >= REVEAL_TIME && !endingReveal.classList.contains('is-target')) {
         endingReveal.classList.add('is-target');
-    }
-
-    if (progress > 0.86) {
-        arrivalGate.classList.add('is-arrived');
     }
 
     if (!hasRevealed && progress >= 1) {
