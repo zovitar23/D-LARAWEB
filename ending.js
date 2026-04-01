@@ -332,6 +332,8 @@ function startEndingSpace() {
 function cycleSpacePhrase() {
     const phrase = spacePhrases[currentSpacePhraseIndex % spacePhrases.length];
     const exitClass = currentSpacePhraseIndex % 2 === 0 ? 'is-exiting-left' : 'is-exiting-right';
+    const wordCount = phrase.trim().split(/\s+/).length;
+    const holdDuration = wordCount > 10 ? 4000 : 3200;
 
     if (spacePhrase.textContent) {
         spacePhrase.classList.remove('is-visible');
@@ -343,7 +345,7 @@ function cycleSpacePhrase() {
         spacePhrase.textContent = phrase;
         spacePhrase.classList.add('is-visible');
         currentSpacePhraseIndex += 1;
-        spacePhraseTimeoutId = setTimeout(cycleSpacePhrase, 3200);
+        spacePhraseTimeoutId = setTimeout(cycleSpacePhrase, holdDuration);
     }, spacePhrase.textContent ? 420 : 0);
 }
 
