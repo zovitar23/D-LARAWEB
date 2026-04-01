@@ -336,6 +336,11 @@ body {
     transform: translateY(0);
 }
 
+.ending-quote.is-line-1 .ending-quote__line--light {
+    opacity: 0;
+    transform: translateY(16px);
+}
+
 .ending-quote.is-line-2 .ending-quote__line--dark {
     opacity: 0;
     transform: translateY(-16px);

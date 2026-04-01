@@ -219,10 +219,12 @@ function drawTunnel(now) {
         quoteScreenTimeoutId = setTimeout(() => {
             endingQuote.classList.add('is-visible');
             quoteTextTimeoutId = setTimeout(() => {
+                endingQuote.classList.remove('is-line-2');
                 endingQuote.classList.add('is-line-1');
                 quoteLineTwoTimeoutId = setTimeout(() => {
+                    endingQuote.classList.remove('is-line-1');
                     endingQuote.classList.add('is-line-2');
-                }, 2000);
+                }, 2600);
             }, 200);
         }, 3000);
         return;
