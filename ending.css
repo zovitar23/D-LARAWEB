@@ -62,13 +62,46 @@ body {
     transition: opacity 1.6s ease;
 }
 
+.arrival-gate::before {
+    content: "";
+    width: min(44vw, 320px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(255, 255, 255, 0) 0 66%, rgba(171, 118, 255, 0.1) 76%, rgba(95, 37, 181, 0.06) 86%, transparent 100%);
+    filter: blur(18px);
+    box-shadow:
+        0 0 20px rgba(144, 84, 255, 0.05),
+        0 0 54px rgba(144, 84, 255, 0.06);
+    transform: scale(0.76);
+    transition: transform 1.8s ease, opacity 1.6s ease;
+    opacity: 0.22;
+}
+
+.arrival-gate.is-near {
+    opacity: 0.42;
+}
+
+.arrival-gate.is-near::before {
+    transform: scale(1);
+}
+
+.arrival-gate.is-arrived {
+    opacity: 0.65;
+}
+
+.arrival-gate.is-arrived::before {
+    transform: scale(1.18);
+    opacity: 0.36;
+}
+
 .ending-reveal {
     z-index: 4;
     display: grid;
     place-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 1s ease;
+    transition: opacity 0.9s ease;
 }
 
 .ending-reveal::before {
@@ -76,31 +109,28 @@ body {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at center, rgba(182, 118, 255, 0.18), transparent 18%),
-        radial-gradient(circle at center, rgba(4, 1, 14, 0.02), rgba(4, 1, 14, 0.54) 60%);
+        radial-gradient(circle at center, rgba(182, 118, 255, 0.12), transparent 18%),
+        radial-gradient(circle at center, rgba(4, 1, 14, 0.01), rgba(4, 1, 14, 0.34) 60%);
     opacity: 0;
-    transition: opacity 1.4s ease;
+    transition: opacity 1.2s ease;
 }
 
-.ending-reveal__content {
-    position: relative;
+.ending-reveal__portal {
+    position: absolute;
+    inset: 0;
     display: grid;
-    justify-items: center;
-    gap: 24px;
-    width: min(92vw, 980px);
-    padding: 0 20px;
+    place-items: center;
 }
 
-.ending-reveal__frame {
+.ending-reveal__portal-image {
     position: relative;
     width: min(92vw, 820px);
-    border-radius: 28px;
     overflow: hidden;
-    clip-path: circle(2.6% at 50% 50%);
-    transform: scale(0.18) translateZ(0);
+    clip-path: circle(2.2% at 50% 50%);
+    transform: scale(0.16) translateZ(0);
     transform-origin: 50% 50%;
     opacity: 0;
-    filter: blur(16px) saturate(1.04) brightness(0.9);
+    filter: blur(20px) saturate(1.02) brightness(0.88);
     transition:
         clip-path 5.2s cubic-bezier(0.12, 0.8, 0.2, 1),
         transform 5.2s cubic-bezier(0.12, 0.8, 0.2, 1),
@@ -108,14 +138,14 @@ body {
         filter 5.2s ease;
 }
 
-.ending-reveal__frame::before {
+.ending-reveal__portal-image::before {
     content: "";
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at center, rgba(255, 245, 252, 0.14), rgba(181, 112, 255, 0.1) 18%, rgba(91, 32, 177, 0.06) 32%, transparent 46%),
-        radial-gradient(circle at center, transparent 0 54%, rgba(6, 2, 18, 0.1) 76%, rgba(6, 2, 18, 0.24) 100%);
-    opacity: 0.68;
+        radial-gradient(circle at center, rgba(255, 245, 252, 0.08), rgba(181, 112, 255, 0.08) 18%, rgba(91, 32, 177, 0.04) 32%, transparent 46%),
+        radial-gradient(circle at center, transparent 0 58%, rgba(6, 2, 18, 0.18) 78%, rgba(6, 2, 18, 0.34) 100%);
+    opacity: 0.56;
     transform: scale(1);
     transition: opacity 1.4s ease, transform 5.2s ease;
     pointer-events: none;
@@ -128,16 +158,40 @@ body {
     height: auto;
     object-fit: cover;
     object-position: center;
-    filter: saturate(1.02) brightness(0.9);
-    transform: scale(1.06);
+    filter: saturate(1.02) brightness(0.88);
+    transform: scale(1.08);
     transition: transform 5.2s cubic-bezier(0.12, 0.8, 0.2, 1), filter 5.2s ease;
+}
+
+.ending-reveal__result {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 24px;
+    width: min(92vw, 980px);
+    padding: 0 20px;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.9s ease, transform 1.1s ease;
+}
+
+.ending-reveal__result-image {
+    display: block;
+    width: min(92vw, 820px);
+    margin: 18px auto 0;
+    border-radius: 28px;
+    box-shadow:
+        0 18px 50px rgba(35, 0, 70, 0.45),
+        0 0 18px rgba(255, 255, 255, 0.08);
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.98) saturate(0.95);
     -webkit-mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
     mask-image: radial-gradient(circle at center, black 62%, transparent 100%);
 }
 
 .ending-reveal__caption {
-    position: relative;
-    z-index: 1;
     margin: 0;
     max-width: 760px;
     font-size: clamp(1rem, 2vw, 1.3rem);
@@ -147,16 +201,9 @@ body {
     letter-spacing: 0.015em;
     color: #f8f2ff;
     text-align: center;
-    opacity: 0;
-    transform: translateY(18px);
     text-shadow:
         0 0 10px rgba(255, 255, 255, 0.12),
         0 0 18px rgba(214, 173, 255, 0.08);
-    background: linear-gradient(180deg, rgba(33, 7, 63, 0.94), rgba(48, 10, 92, 0.9));
-    padding: 10px 22px;
-    border-radius: 999px;
-    box-shadow: 0 8px 26px rgba(12, 0, 28, 0.16);
-    transition: opacity 1.2s ease, transform 1.4s ease;
 }
 
 .ending-reveal.is-target {
@@ -164,82 +211,49 @@ body {
 }
 
 .ending-reveal.is-target::before {
-    opacity: 0.44;
+    opacity: 0.34;
 }
 
-.ending-reveal.is-target .ending-reveal__frame {
-    clip-path: circle(10% at 50% 50%);
-    transform: scale(0.28);
-    opacity: 0.66;
-    filter: blur(10px) saturate(1.02) brightness(0.9);
+.ending-reveal.is-target .ending-reveal__portal-image {
+    clip-path: circle(8% at 50% 50%);
+    transform: scale(0.42);
+    opacity: 0.74;
+    filter: blur(12px) saturate(1.02) brightness(0.88);
 }
 
-.ending-reveal.is-target .ending-reveal__frame::before {
-    opacity: 0.82;
-    transform: scale(1.04);
+.ending-reveal.is-target .ending-reveal__portal-image::before {
+    opacity: 0.68;
+    transform: scale(1.06);
 }
 
 .ending-reveal.is-target .ending-reveal__image {
-    transform: scale(1.04);
+    transform: scale(1.06);
 }
 
 .ending-reveal.is-arrived::before {
-    opacity: 0.14;
+    opacity: 0.06;
 }
 
-.ending-reveal.is-arrived .ending-reveal__frame {
-    clip-path: inset(0 round 28px);
-    transform: scale(1);
-    opacity: 1;
-    filter: blur(0) saturate(1);
+.ending-reveal.is-arrived .ending-reveal__portal-image {
+    clip-path: circle(92% at 50% 50%);
+    transform: scale(3.2);
+    opacity: 0;
+    filter: blur(2px) saturate(1) brightness(0.96);
 }
 
-.ending-reveal.is-arrived .ending-reveal__frame::before {
-    opacity: 0.16;
-    transform: scale(1.3);
+.ending-reveal.is-arrived .ending-reveal__portal-image::before {
+    opacity: 0;
+    transform: scale(1.24);
 }
 
 .ending-reveal.is-arrived .ending-reveal__image {
-    transform: scale(1);
-    filter: saturate(1.02) brightness(0.96);
+    transform: scale(1.02);
+    filter: saturate(1.02) brightness(0.94);
 }
 
-.ending-reveal.is-arrived .ending-reveal__caption {
+.ending-reveal.is-arrived .ending-reveal__result {
     opacity: 1;
     transform: translateY(0);
-}
-
-.arrival-gate::before {
-    content: "";
-    width: min(44vw, 320px);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle, rgba(255, 255, 255, 0) 0 56%, rgba(255, 222, 248, 0.08) 63%, rgba(203, 151, 255, 0.3) 71%, rgba(119, 58, 222, 0.18) 78%, rgba(83, 26, 151, 0.06) 86%, transparent 100%);
-    filter: blur(10px);
-    box-shadow:
-        0 0 28px rgba(255, 187, 239, 0.08),
-        0 0 96px rgba(144, 84, 255, 0.12);
-    transform: scale(0.76);
-    transition: transform 1.8s ease, opacity 1.6s ease;
-    opacity: 0.7;
-}
-
-.arrival-gate.is-near {
-    opacity: 0.5;
-}
-
-.arrival-gate.is-near::before {
-    transform: scale(1);
-}
-
-.arrival-gate.is-arrived {
-    opacity: 1;
-}
-
-.arrival-gate.is-arrived::before {
-    transform: scale(1.08);
-    opacity: 1;
 }
 
 .love-word {
@@ -293,7 +307,7 @@ body {
 .ending-page.is-ended .love-overlay,
 .ending-page.is-ended .arrival-gate {
     opacity: 0;
-    transition: opacity 1.4s ease;
+    transition: opacity 1.2s ease;
 }
 
 .ending-page.is-ended .vignette {
