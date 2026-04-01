@@ -1,6 +1,8 @@
 const canvas = document.getElementById('vortexCanvas');
 const ctx = canvas.getContext('2d');
 const overlay = document.getElementById('loveOverlay');
+const arrivalGate = document.getElementById('arrivalGate');
+const endingCopy = document.querySelector('.ending-copy');
 
 const lovePhrases = [
     'I love you',
@@ -25,6 +27,7 @@ let height = 0;
 let centerX = 0;
 let centerY = 0;
 let animationStart = performance.now();
+const JOURNEY_DURATION = 20;
 
 const tunnelParticles = [];
 const streakCount = 280;
@@ -64,8 +67,9 @@ function ensureParticles() {
 
 function drawTunnel(now) {
     const elapsed = (now - animationStart) / 1000;
-    const introBoost = Math.max(0, 1 - elapsed / 20);
-    const travelSpeed = 0.016 + introBoost * 0.02;
+    const progress = Math.min(elapsed / JOURNEY_DURATION, 1);
+    const introBoost = Math.max(0, 1 - progress);
+    const travelSpeed = 0.016 + introBoost * 0.02 + progress * 0.016;
 
     ctx.clearRect(0, 0, width, height);
     ensureParticles();
@@ -78,7 +82,7 @@ function drawTunnel(now) {
     ctx.fillRect(0, 0, width, height);
 
     for (const particle of tunnelParticles) {
-        particle.z -= particle.speed + introBoost * 0.0025;
+        particle.z -= particle.speed + introBoost * 0.0025 + progress * 0.002;
         if (particle.z <= 0.02) {
             Object.assign(particle, createParticle(false), { z: 1 });
         }
@@ -91,8 +95,8 @@ function drawTunnel(now) {
         const y = centerY + Math.sin(orbit) * tunnelRadius * 0.78;
         const tailX = centerX + Math.cos(orbit) * tunnelRadius * 0.72;
         const tailY = centerY + Math.sin(orbit) * tunnelRadius * 0.72 * 0.78;
-        const alpha = Math.min(0.95, 0.08 + depth * 0.95);
-        const lineWidth = 0.5 + particle.size * depth * 0.85;
+        const alpha = Math.min(0.95, 0.08 + depth * (0.8 + progress * 0.4));
+        const lineWidth = 0.5 + particle.size * depth * (0.85 + progress * 0.3);
 
         ctx.beginPath();
         ctx.strokeStyle = `hsla(${particle.hue}, 95%, 78%, ${alpha})`;
@@ -107,6 +111,15 @@ function drawTunnel(now) {
         ctx.fillStyle = `hsla(${particle.hue}, 100%, 86%, ${Math.min(1, alpha + 0.08)})`;
         ctx.arc(x, y, 0.7 + particle.size * depth * 0.55, 0, Math.PI * 2);
         ctx.fill();
+    }
+
+    if (progress > 0.7) {
+        arrivalGate.classList.add('is-near');
+        endingCopy.classList.add('is-arriving');
+    }
+
+    if (progress > 0.94) {
+        arrivalGate.classList.add('is-arrived');
     }
 
     ctx.shadowBlur = 0;

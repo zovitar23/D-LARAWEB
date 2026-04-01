@@ -26,6 +26,7 @@ body {
 .vortex-canvas,
 .vignette,
 .love-overlay,
+.arrival-gate,
 .ending-copy {
     position: absolute;
     inset: 0;
@@ -51,6 +52,48 @@ body {
     pointer-events: none;
 }
 
+.arrival-gate {
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.6s ease;
+}
+
+.arrival-gate::before {
+    content: "";
+    width: min(54vw, 420px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(255, 245, 252, 0.98) 0 12%, rgba(255, 181, 242, 0.64) 22%, rgba(173, 101, 255, 0.28) 44%, rgba(83, 26, 151, 0.08) 62%, transparent 72%);
+    filter: blur(2px);
+    box-shadow:
+        0 0 40px rgba(255, 187, 239, 0.24),
+        0 0 140px rgba(144, 84, 255, 0.18);
+    transform: scale(0.7);
+    transition: transform 1.8s ease, opacity 1.6s ease;
+    opacity: 0.85;
+}
+
+.arrival-gate.is-near {
+    opacity: 0.5;
+}
+
+.arrival-gate.is-near::before {
+    transform: scale(1);
+}
+
+.arrival-gate.is-arrived {
+    opacity: 1;
+}
+
+.arrival-gate.is-arrived::before {
+    transform: scale(1.18);
+    opacity: 1;
+}
+
 .love-word {
     position: absolute;
     left: 0;
@@ -72,6 +115,12 @@ body {
     text-align: center;
     padding: 24px;
     pointer-events: none;
+}
+
+.ending-copy.is-arriving {
+    transform: scale(0.985);
+    opacity: 0.78;
+    transition: transform 1.2s ease, opacity 1.2s ease;
 }
 
 .ending-kicker {
