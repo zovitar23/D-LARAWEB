@@ -277,6 +277,11 @@ body {
     transition: opacity 0.2s ease;
 }
 
+.ending-quote__screen--light {
+    background: #fff;
+    opacity: 0;
+}
+
 .ending-quote__text {
     position: relative;
     z-index: 1;
@@ -300,12 +305,12 @@ body {
 }
 
 .ending-quote__line--dark {
-    background: #000;
+    background: transparent;
     color: #fff;
 }
 
 .ending-quote__line--light {
-    background: #fff;
+    background: transparent;
     color: #000;
 }
 
@@ -320,6 +325,19 @@ body {
 .ending-quote.is-line-1 .ending-quote__line--dark {
     opacity: 1;
     transform: translateY(0);
+}
+
+.ending-quote.is-line-2 .ending-quote__line--dark {
+    opacity: 0;
+    transform: translateY(-16px);
+}
+
+.ending-quote.is-line-2 .ending-quote__screen {
+    opacity: 0;
+}
+
+.ending-quote.is-line-2 .ending-quote__screen--light {
+    opacity: 1;
 }
 
 .ending-quote.is-line-2 .ending-quote__line--light {
