@@ -68,8 +68,7 @@ body {
     place-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 1.6s ease, transform 1.8s ease;
-    transform: scale(1.06);
+    transition: opacity 1.2s ease;
 }
 
 .ending-reveal::before {
@@ -77,36 +76,59 @@ body {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at center, rgba(182, 118, 255, 0.2), transparent 34%),
-        rgba(4, 1, 14, 0.72);
+        radial-gradient(circle at center, rgba(182, 118, 255, 0.16), transparent 26%),
+        radial-gradient(circle at center, rgba(4, 1, 14, 0.08), rgba(4, 1, 14, 0.6) 72%);
     opacity: 0;
-    transition: opacity 1.6s ease;
+    transition: opacity 1.4s ease;
 }
 
 .ending-reveal__frame {
     position: relative;
-    width: min(78vw, 760px);
-    border-radius: 32px;
+    width: min(72vw, 680px);
+    aspect-ratio: 1.45;
+    border-radius: 36px;
     overflow: hidden;
+    clip-path: circle(4.5% at 50% 50%);
     box-shadow:
-        0 0 40px rgba(194, 133, 255, 0.18),
-        0 30px 120px rgba(0, 0, 0, 0.48);
-    transform: translateY(24px) scale(0.94);
+        0 0 28px rgba(194, 133, 255, 0.16),
+        0 24px 90px rgba(0, 0, 0, 0.38);
+    transform: scale(0.16) translateZ(0);
+    transform-origin: 50% 50%;
     opacity: 0;
-    transition: transform 1.8s ease, opacity 1.6s ease;
+    filter: blur(18px) saturate(1.12);
+    transition:
+        clip-path 2.4s cubic-bezier(0.18, 0.78, 0.2, 1),
+        transform 2.2s cubic-bezier(0.18, 0.78, 0.2, 1),
+        opacity 1.4s ease,
+        filter 2.1s ease,
+        box-shadow 2.1s ease;
+}
+
+.ending-reveal__frame::before {
+    content: "";
+    position: absolute;
+    inset: -8%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 238, 250, 0.26) 0, rgba(180, 114, 255, 0.22) 22%, rgba(91, 32, 177, 0.12) 42%, transparent 72%);
+    opacity: 0.9;
+    transform: scale(1.08);
+    transition: opacity 1.4s ease, transform 2s ease;
+    pointer-events: none;
+    mix-blend-mode: screen;
 }
 
 .ending-reveal__image {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
-    filter: saturate(1.02) brightness(0.98);
+    filter: saturate(1.04) brightness(0.98);
+    transform: scale(1.1);
+    transition: transform 2.4s cubic-bezier(0.18, 0.78, 0.2, 1);
 }
 
 .ending-reveal.is-visible {
     opacity: 1;
-    transform: scale(1);
 }
 
 .ending-reveal.is-visible::before {
@@ -114,8 +136,22 @@ body {
 }
 
 .ending-reveal.is-visible .ending-reveal__frame {
-    transform: translateY(0) scale(1);
+    clip-path: circle(74% at 50% 50%);
+    transform: scale(1);
     opacity: 1;
+    filter: blur(0) saturate(1);
+    box-shadow:
+        0 0 44px rgba(194, 133, 255, 0.22),
+        0 30px 120px rgba(0, 0, 0, 0.42);
+}
+
+.ending-reveal.is-visible .ending-reveal__frame::before {
+    opacity: 0.24;
+    transform: scale(1.65);
+}
+
+.ending-reveal.is-visible .ending-reveal__image {
+    transform: scale(1);
 }
 
 .arrival-gate::before {
@@ -200,9 +236,17 @@ body {
 }
 
 .ending-page.is-ended .love-overlay,
-.ending-page.is-ended .arrival-gate,
-.ending-page.is-ended .vignette,
-.ending-page.is-ended .vortex-canvas {
+.ending-page.is-ended .arrival-gate {
     opacity: 0;
-    transition: opacity 1.6s ease;
+    transition: opacity 1.4s ease;
+}
+
+.ending-page.is-ended .vignette {
+    opacity: 0.24;
+    transition: opacity 1.8s ease;
+}
+
+.ending-page.is-ended .vortex-canvas {
+    opacity: 0.22;
+    transition: opacity 1.8s ease;
 }
