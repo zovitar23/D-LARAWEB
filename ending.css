@@ -193,6 +193,10 @@ body {
 .ending-reveal__caption {
     margin: 0;
     max-width: 760px;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
     font-size: clamp(1rem, 2vw, 1.3rem);
     line-height: 1.8;
     font-family: 'Cormorant Garamond', Georgia, serif;
