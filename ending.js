@@ -222,7 +222,7 @@ function drawTunnel(now) {
                 endingQuote.classList.add('is-line-1');
                 quoteLineTwoTimeoutId = setTimeout(() => {
                     endingQuote.classList.add('is-line-2');
-                }, 1800);
+                }, 2000);
             }, 200);
         }, 3000);
         return;
