@@ -29,6 +29,7 @@ body {
 .arrival-gate,
 .ending-reveal,
 .ending-quote,
+.ending-space,
 .ending-copy {
     position: absolute;
     inset: 0;
@@ -357,6 +358,81 @@ body {
 .ending-quote.is-line-2 .ending-quote__line--light {
     opacity: 1;
     transform: translateY(0);
+}
+
+.ending-space {
+    z-index: 8;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(173, 106, 255, 0.18), transparent 18%),
+        radial-gradient(circle at 50% 50%, rgba(88, 30, 190, 0.22), transparent 42%),
+        linear-gradient(180deg, #080210 0%, #140326 42%, #250548 100%);
+}
+
+.ending-space.is-visible {
+    opacity: 1;
+}
+
+.ending-space__canvas,
+.ending-space__glow {
+    position: absolute;
+    inset: 0;
+}
+
+.ending-space__canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.ending-space__glow {
+    background:
+        radial-gradient(circle at center, rgba(216, 173, 255, 0.12), transparent 14%),
+        radial-gradient(circle at center, rgba(92, 36, 188, 0.16), transparent 36%);
+    pointer-events: none;
+}
+
+.ending-space__phrase {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(78vw, 920px);
+    transform: translate3d(-50%, -50%, 0) scale(0.7);
+    text-align: center;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(1.8rem, 4vw, 3.8rem);
+    line-height: 1.22;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #fff7ff;
+    text-shadow:
+        0 0 12px rgba(255, 255, 255, 0.16),
+        0 0 28px rgba(187, 137, 255, 0.16);
+    opacity: 0;
+    filter: blur(6px);
+    transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease;
+    will-change: transform, opacity, filter;
+}
+
+.ending-space__phrase.is-visible {
+    opacity: 1;
+    transform: translate3d(-50%, -50%, 0) scale(1);
+    filter: blur(0);
+}
+
+.ending-space__phrase.is-exiting-left {
+    opacity: 0;
+    transform: translate3d(-62%, -50%, 0) scale(0.84);
+    filter: blur(5px);
+}
+
+.ending-space__phrase.is-exiting-right {
+    opacity: 0;
+    transform: translate3d(-38%, -50%, 0) scale(0.84);
+    filter: blur(5px);
 }
 
 .love-word {

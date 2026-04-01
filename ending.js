@@ -6,6 +6,10 @@ const endingCopy = document.querySelector('.ending-copy');
 const endingPage = document.querySelector('.ending-page');
 const endingReveal = document.getElementById('endingReveal');
 const endingQuote = document.getElementById('endingQuote');
+const spaceSection = document.getElementById('endingSpace');
+const spaceCanvas = document.getElementById('spaceCanvas');
+const spaceCtx = spaceCanvas.getContext('2d');
+const spacePhrase = document.getElementById('endingSpacePhrase');
 
 const lovePhrases = [
     'Seni seviyorum',
@@ -21,10 +25,23 @@ const lovePhrases = [
     'Ik hou van jou',
 ];
 
+const spacePhrases = [
+    'Gökyüzü güneş olsa, sensiz karanlıktayım. Sadece sen lazımsın bana.',
+    'Biz hiçbir zaman uzak olmadık, olamayız. Ya aklımdasın ya kalbimde.',
+    'Keşke yanımda olsan; değilsin. Bulunduğun ortam çok şanslı.',
+    'Dünyanın enleri sende toplanmış sanki. Bir ruha üflenmiş; Tanrı, enlere bir beden vermiş gibi.',
+    'Dünyanın kötülüğüne rağmen en güzeli sensin.',
+    'Bir Tanrı’nın en güzel eseri.',
+    'Seni duyup hissedenler ne kadar şanslı. Kim bilir, sesini gökyüzü sanan kuşlar bile vardır.',
+    'Sende kusur arayan gözler, kusurlarına aşık olur.',
+    'Hiç sarılmadan sarılmayı özletensin.',
+];
+
 const JOURNEY_DURATION = 6;
 const REVEAL_TIME = 1;
 const warpLines = [];
 const warpRings = [];
+const spaceStars = [];
 let width = 0;
 let height = 0;
 let centerX = 0;
@@ -35,6 +52,10 @@ let wordIntervalId = null;
 let quoteScreenTimeoutId = null;
 let quoteTextTimeoutId = null;
 let quoteLineTwoTimeoutId = null;
+let spaceStartTimeoutId = null;
+let spacePhraseTimeoutId = null;
+let currentSpacePhraseIndex = 0;
+let spaceAnimationFrame = 0;
 
 function resizeCanvas() {
     width = window.innerWidth;
@@ -46,6 +67,12 @@ function resizeCanvas() {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+
+    spaceCanvas.width = width * devicePixelRatio;
+    spaceCanvas.height = height * devicePixelRatio;
+    spaceCanvas.style.width = `${width}px`;
+    spaceCanvas.style.height = `${height}px`;
+    spaceCtx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
 }
 
 function createWarpLine(z = Math.random()) {
@@ -77,6 +104,22 @@ function bootstrapScene() {
     for (let i = 0; i < 11; i += 1) {
         warpRings.push(createWarpRing(i / 11));
     }
+
+    for (let i = 0; i < 260; i += 1) {
+        spaceStars.push(createSpaceStar());
+    }
+}
+
+function createSpaceStar(z = Math.random()) {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.random() * 0.9;
+    return {
+        angle,
+        radius,
+        z,
+        speed: 0.005 + Math.random() * 0.012,
+        size: 0.8 + Math.random() * 1.8,
+    };
 }
 
 function drawBackgroundGlow(progress) {
@@ -226,6 +269,9 @@ function drawTunnel(now) {
                     endingQuote.classList.add('is-line-2');
                 }, 2600);
             }, 200);
+            spaceStartTimeoutId = setTimeout(() => {
+                startEndingSpace();
+            }, 5200);
         }, 3000);
         return;
     }
@@ -272,6 +318,59 @@ function startLoveWords() {
     }
 
     wordIntervalId = setInterval(spawnLoveWord, 1800);
+}
+
+function startEndingSpace() {
+    endingQuote.classList.remove('is-visible', 'is-line-1', 'is-line-2');
+    spaceSection.classList.add('is-visible');
+    cycleSpacePhrase();
+    if (!spaceAnimationFrame) {
+        spaceAnimationFrame = requestAnimationFrame(drawSpaceScene);
+    }
+}
+
+function cycleSpacePhrase() {
+    const phrase = spacePhrases[currentSpacePhraseIndex % spacePhrases.length];
+    const exitClass = currentSpacePhraseIndex % 2 === 0 ? 'is-exiting-left' : 'is-exiting-right';
+
+    if (spacePhrase.textContent) {
+        spacePhrase.classList.remove('is-visible');
+        spacePhrase.classList.add(exitClass);
+    }
+
+    setTimeout(() => {
+        spacePhrase.classList.remove('is-exiting-left', 'is-exiting-right');
+        spacePhrase.textContent = phrase;
+        spacePhrase.classList.add('is-visible');
+        currentSpacePhraseIndex += 1;
+        spacePhraseTimeoutId = setTimeout(cycleSpacePhrase, 3200);
+    }, spacePhrase.textContent ? 420 : 0);
+}
+
+function drawSpaceScene() {
+    spaceCtx.clearRect(0, 0, width, height);
+
+    for (const star of spaceStars) {
+        star.z -= star.speed;
+        if (star.z <= 0.02) {
+            Object.assign(star, createSpaceStar(1));
+        }
+
+        const perspective = 1 / Math.max(star.z, 0.04);
+        const travel = Math.pow(1 - star.z, 1.8);
+        const orbit = Math.min(width, height) * star.radius * 0.6;
+        const x = centerX + Math.cos(star.angle) * orbit * perspective;
+        const y = centerY + Math.sin(star.angle) * orbit * perspective;
+        const size = star.size * (0.4 + travel * 2.2);
+        const alpha = Math.min(0.95, 0.16 + travel * 0.7);
+
+        spaceCtx.beginPath();
+        spaceCtx.fillStyle = `rgba(246, 236, 255, ${alpha})`;
+        spaceCtx.arc(x, y, size, 0, Math.PI * 2);
+        spaceCtx.fill();
+    }
+
+    spaceAnimationFrame = requestAnimationFrame(drawSpaceScene);
 }
 
 resizeCanvas();
