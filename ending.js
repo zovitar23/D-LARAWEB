@@ -10,6 +10,7 @@ const spaceSection = document.getElementById('endingSpace');
 const spaceCanvas = document.getElementById('spaceCanvas');
 const spaceCtx = spaceCanvas.getContext('2d');
 const spacePhrase = document.getElementById('endingSpacePhrase');
+const spaceCamera = document.getElementById('endingSpaceCamera');
 
 const lovePhrases = [
     'Seni seviyorum',
@@ -56,6 +57,14 @@ let spaceStartTimeoutId = null;
 let spacePhraseTimeoutId = null;
 let currentSpacePhraseIndex = 0;
 let spaceAnimationFrame = 0;
+const phraseAngles = [
+    { x: 34, y: 34, ry: -20, rx: 6, z: 40, exit: 'is-exiting-right', align: 'is-left' },
+    { x: 68, y: 42, ry: 18, rx: -4, z: -10, exit: 'is-exiting-left', align: 'is-right' },
+    { x: 29, y: 63, ry: -14, rx: 5, z: 30, exit: 'is-exiting-right', align: 'is-left' },
+    { x: 72, y: 60, ry: 22, rx: 3, z: -20, exit: 'is-exiting-left', align: 'is-right' },
+    { x: 38, y: 36, ry: -9, rx: -5, z: 10, exit: 'is-exiting-right', align: 'is-left' },
+    { x: 64, y: 54, ry: 12, rx: 6, z: -5, exit: 'is-exiting-left', align: 'is-right' },
+];
 
 function resizeCanvas() {
     width = window.innerWidth;
@@ -331,7 +340,8 @@ function startEndingSpace() {
 
 function cycleSpacePhrase() {
     const phrase = spacePhrases[currentSpacePhraseIndex % spacePhrases.length];
-    const exitClass = currentSpacePhraseIndex % 2 === 0 ? 'is-exiting-left' : 'is-exiting-right';
+    const config = phraseAngles[currentSpacePhraseIndex % phraseAngles.length];
+    const exitClass = config.exit;
     const wordCount = phrase.trim().split(/\s+/).length;
     const holdDuration = wordCount > 10 ? 4000 : 3200;
 
@@ -342,8 +352,17 @@ function cycleSpacePhrase() {
 
     setTimeout(() => {
         spacePhrase.classList.remove('is-exiting-left', 'is-exiting-right');
+        spacePhrase.classList.remove('is-left', 'is-right');
+        spacePhrase.classList.add(config.align);
         spacePhrase.textContent = phrase;
+        spacePhrase.style.left = `${config.x}%`;
+        spacePhrase.style.top = `${config.y}%`;
+        spacePhrase.style.transform = `translate3d(-50%, -50%, ${config.z}px) rotateY(${config.ry}deg) rotateX(${config.rx}deg) scale(0.72)`;
+        spaceCamera.style.transform = `rotateY(${-config.ry * 0.7}deg) rotateX(${-config.rx * 0.7}deg) translateZ(0)`;
         spacePhrase.classList.add('is-visible');
+        requestAnimationFrame(() => {
+            spacePhrase.style.transform = `translate3d(-50%, -50%, ${config.z}px) rotateY(${config.ry}deg) rotateX(${config.rx}deg) scale(1)`;
+        });
         currentSpacePhraseIndex += 1;
         spacePhraseTimeoutId = setTimeout(cycleSpacePhrase, holdDuration);
     }, spacePhrase.textContent ? 420 : 0);

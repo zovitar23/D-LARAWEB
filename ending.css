@@ -377,7 +377,8 @@ body {
 }
 
 .ending-space__canvas,
-.ending-space__glow {
+.ending-space__glow,
+.ending-space__camera {
     position: absolute;
     inset: 0;
 }
@@ -395,15 +396,24 @@ body {
     pointer-events: none;
 }
 
+.ending-space__camera {
+    transform-style: preserve-3d;
+    perspective: 1600px;
+    transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+}
+
 .ending-space__phrase {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: min(78vw, 920px);
-    transform: translate3d(-50%, -50%, 0) scale(0.7);
-    text-align: center;
+    width: min(34vw, 440px);
+    max-width: 440px;
+    transform: translate3d(-50%, -50%, -120px) rotateY(0deg) rotateX(0deg) scale(0.72);
+    transform-style: preserve-3d;
+    text-align: left;
     font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: clamp(1.8rem, 4vw, 3.8rem);
+    font-size: clamp(1.5rem, 2.8vw, 2.9rem);
     line-height: 1.22;
     font-weight: 600;
     letter-spacing: 0.01em;
@@ -413,26 +423,31 @@ body {
         0 0 28px rgba(187, 137, 255, 0.16);
     opacity: 0;
     filter: blur(6px);
-    transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease;
+    transition: opacity 0.65s ease, transform 0.85s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.65s ease;
     will-change: transform, opacity, filter;
 }
 
 .ending-space__phrase.is-visible {
     opacity: 1;
-    transform: translate3d(-50%, -50%, 0) scale(1);
     filter: blur(0);
+}
+
+.ending-space__phrase.is-left {
+    text-align: left;
+}
+
+.ending-space__phrase.is-right {
+    text-align: right;
 }
 
 .ending-space__phrase.is-exiting-left {
     opacity: 0;
-    transform: translate3d(-62%, -50%, 0) scale(0.84);
     filter: blur(5px);
 }
 
 .ending-space__phrase.is-exiting-right {
     opacity: 0;
-    transform: translate3d(-38%, -50%, 0) scale(0.84);
-    filter: blur(5px);
+    filter: blur(0);
 }
 
 .love-word {
