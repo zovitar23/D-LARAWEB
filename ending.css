@@ -43,7 +43,7 @@ body {
 
 .vignette {
     background:
-        radial-gradient(circle at center, transparent 0 18%, rgba(7, 2, 18, 0.08) 40%, rgba(3, 1, 12, 0.74) 100%),
+        radial-gradient(circle at center, transparent 0 14%, rgba(7, 2, 18, 0.12) 34%, rgba(3, 1, 12, 0.82) 100%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.02));
     z-index: 2;
     pointer-events: none;
@@ -56,30 +56,45 @@ body {
 }
 
 .arrival-gate {
-    display: none;
+    z-index: 3;
+    display: grid;
+    place-items: center;
     opacity: 0;
     pointer-events: none;
+    transition: opacity 1.6s ease;
 }
 
 .arrival-gate::before {
     content: "";
-    display: none;
+    width: min(44vw, 320px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(255, 255, 255, 0) 0 66%, rgba(171, 118, 255, 0.1) 76%, rgba(95, 37, 181, 0.06) 86%, transparent 100%);
+    filter: blur(18px);
+    box-shadow:
+        0 0 20px rgba(144, 84, 255, 0.05),
+        0 0 54px rgba(144, 84, 255, 0.06);
+    transform: scale(0.76);
+    transition: transform 1.8s ease, opacity 1.6s ease;
+    opacity: 0.22;
 }
 
 .arrival-gate.is-near {
-    opacity: 0;
+    opacity: 0.42;
 }
 
 .arrival-gate.is-near::before {
-    display: none;
+    transform: scale(1);
 }
 
 .arrival-gate.is-arrived {
-    opacity: 0;
+    opacity: 0.65;
 }
 
 .arrival-gate.is-arrived::before {
-    display: none;
+    transform: scale(1.18);
+    opacity: 0.36;
 }
 
 .ending-reveal {
