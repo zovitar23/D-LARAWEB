@@ -280,30 +280,31 @@ body {
 .ending-quote__text {
     position: relative;
     z-index: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    justify-items: center;
+    gap: 18px;
     max-width: min(92vw, 1100px);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 1;
 }
 
-.ending-quote__segment {
-    display: inline-block;
-    padding: 12px 18px;
+.ending-quote__line {
+    margin: 0;
+    padding: 12px 20px;
     font-size: clamp(1.4rem, 3.5vw, 3.3rem);
-    line-height: 1.18;
+    line-height: 1.15;
     font-weight: 700;
     letter-spacing: 0.01em;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
 }
 
-.ending-quote__segment--dark {
+.ending-quote__line--dark {
     background: #000;
     color: #fff;
 }
 
-.ending-quote__segment--light {
+.ending-quote__line--light {
     background: #fff;
     color: #000;
 }
@@ -316,7 +317,12 @@ body {
     opacity: 1;
 }
 
-.ending-quote.is-text-visible .ending-quote__text {
+.ending-quote.is-line-1 .ending-quote__line--dark {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.ending-quote.is-line-2 .ending-quote__line--light {
     opacity: 1;
     transform: translateY(0);
 }

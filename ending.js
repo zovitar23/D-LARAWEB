@@ -34,6 +34,7 @@ let hasRevealed = false;
 let wordIntervalId = null;
 let quoteScreenTimeoutId = null;
 let quoteTextTimeoutId = null;
+let quoteLineTwoTimeoutId = null;
 
 function resizeCanvas() {
     width = window.innerWidth;
@@ -218,7 +219,10 @@ function drawTunnel(now) {
         quoteScreenTimeoutId = setTimeout(() => {
             endingQuote.classList.add('is-visible');
             quoteTextTimeoutId = setTimeout(() => {
-                endingQuote.classList.add('is-text-visible');
+                endingQuote.classList.add('is-line-1');
+                quoteLineTwoTimeoutId = setTimeout(() => {
+                    endingQuote.classList.add('is-line-2');
+                }, 950);
             }, 200);
         }, 3000);
         return;
