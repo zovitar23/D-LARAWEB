@@ -5,6 +5,7 @@ const arrivalGate = document.getElementById('arrivalGate');
 const endingCopy = document.querySelector('.ending-copy');
 const endingPage = document.querySelector('.ending-page');
 const endingReveal = document.getElementById('endingReveal');
+const endingQuote = document.getElementById('endingQuote');
 
 const lovePhrases = [
     'Seni seviyorum',
@@ -31,6 +32,8 @@ let centerY = 0;
 let animationStart = performance.now();
 let hasRevealed = false;
 let wordIntervalId = null;
+let quoteScreenTimeoutId = null;
+let quoteTextTimeoutId = null;
 
 function resizeCanvas() {
     width = window.innerWidth;
@@ -212,6 +215,12 @@ function drawTunnel(now) {
         endingPage.classList.add('is-ended');
         endingCopy.classList.add('is-hidden');
         endingReveal.classList.add('is-arrived');
+        quoteScreenTimeoutId = setTimeout(() => {
+            endingQuote.classList.add('is-visible');
+            quoteTextTimeoutId = setTimeout(() => {
+                endingQuote.classList.add('is-text-visible');
+            }, 200);
+        }, 3000);
         return;
     }
 

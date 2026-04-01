@@ -28,6 +28,7 @@ body {
 .love-overlay,
 .arrival-gate,
 .ending-reveal,
+.ending-quote,
 .ending-copy {
     position: absolute;
     inset: 0;
@@ -255,6 +256,67 @@ body {
 }
 
 .ending-reveal.is-arrived .ending-reveal__result {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.ending-quote {
+    z-index: 7;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.ending-quote__screen {
+    position: absolute;
+    inset: 0;
+    background: #000;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.ending-quote__text {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: min(92vw, 1100px);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.ending-quote__segment {
+    display: inline-block;
+    padding: 12px 18px;
+    font-size: clamp(1.4rem, 3.5vw, 3.3rem);
+    line-height: 1.18;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.ending-quote__segment--dark {
+    background: #000;
+    color: #fff;
+}
+
+.ending-quote__segment--light {
+    background: #fff;
+    color: #000;
+}
+
+.ending-quote.is-visible {
+    opacity: 1;
+}
+
+.ending-quote.is-visible .ending-quote__screen {
+    opacity: 1;
+}
+
+.ending-quote.is-text-visible .ending-quote__text {
     opacity: 1;
     transform: translateY(0);
 }
