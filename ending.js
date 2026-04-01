@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 const overlay = document.getElementById('loveOverlay');
 const arrivalGate = document.getElementById('arrivalGate');
 const endingCopy = document.querySelector('.ending-copy');
+const endingPage = document.querySelector('.ending-page');
+const endingReveal = document.getElementById('endingReveal');
 
 const lovePhrases = [
     'Seni seviyorum',
@@ -19,6 +21,7 @@ const lovePhrases = [
 ];
 
 const JOURNEY_DURATION = 20;
+const REVEAL_TIME = 15;
 const warpLines = [];
 const warpRings = [];
 let width = 0;
@@ -26,6 +29,8 @@ let height = 0;
 let centerX = 0;
 let centerY = 0;
 let animationStart = performance.now();
+let hasRevealed = false;
+let wordIntervalId = null;
 
 function resizeCanvas() {
     width = window.innerWidth;
@@ -190,10 +195,25 @@ function drawTunnel(now) {
         arrivalGate.classList.add('is-arrived');
     }
 
+    if (!hasRevealed && elapsed >= REVEAL_TIME) {
+        hasRevealed = true;
+        if (wordIntervalId) {
+            clearInterval(wordIntervalId);
+        }
+        endingPage.classList.add('is-ended');
+        endingCopy.classList.add('is-hidden');
+        endingReveal.classList.add('is-visible');
+        return;
+    }
+
     requestAnimationFrame(drawTunnel);
 }
 
 function spawnLoveWord() {
+    if (hasRevealed) {
+        return;
+    }
+
     const word = document.createElement('span');
     const fromLeft = Math.random() > 0.5;
     const phrase = lovePhrases[Math.floor(Math.random() * lovePhrases.length)];
@@ -227,7 +247,7 @@ function startLoveWords() {
         setTimeout(spawnLoveWord, i * 420);
     }
 
-    setInterval(spawnLoveWord, 1800);
+    wordIntervalId = setInterval(spawnLoveWord, 1800);
 }
 
 resizeCanvas();

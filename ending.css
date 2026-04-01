@@ -27,6 +27,7 @@ body {
 .vignette,
 .love-overlay,
 .arrival-gate,
+.ending-reveal,
 .ending-copy {
     position: absolute;
     inset: 0;
@@ -59,6 +60,62 @@ body {
     opacity: 0;
     pointer-events: none;
     transition: opacity 1.6s ease;
+}
+
+.ending-reveal {
+    z-index: 4;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.6s ease, transform 1.8s ease;
+    transform: scale(1.06);
+}
+
+.ending-reveal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at center, rgba(182, 118, 255, 0.2), transparent 34%),
+        rgba(4, 1, 14, 0.72);
+    opacity: 0;
+    transition: opacity 1.6s ease;
+}
+
+.ending-reveal__frame {
+    position: relative;
+    width: min(78vw, 760px);
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow:
+        0 0 40px rgba(194, 133, 255, 0.18),
+        0 30px 120px rgba(0, 0, 0, 0.48);
+    transform: translateY(24px) scale(0.94);
+    opacity: 0;
+    transition: transform 1.8s ease, opacity 1.6s ease;
+}
+
+.ending-reveal__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    filter: saturate(1.02) brightness(0.98);
+}
+
+.ending-reveal.is-visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.ending-reveal.is-visible::before {
+    opacity: 1;
+}
+
+.ending-reveal.is-visible .ending-reveal__frame {
+    transform: translateY(0) scale(1);
+    opacity: 1;
 }
 
 .arrival-gate::before {
@@ -109,18 +166,23 @@ body {
 }
 
 .ending-copy {
-    z-index: 4;
+    z-index: 5;
     display: grid;
     place-items: start center;
     text-align: center;
     padding: 12vh 24px 24px;
     pointer-events: none;
+    transition: opacity 1.2s ease, transform 1.2s ease;
 }
 
 .ending-copy.is-arriving {
     transform: scale(0.985);
     opacity: 0.78;
-    transition: transform 1.2s ease, opacity 1.2s ease;
+}
+
+.ending-copy.is-hidden {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.98);
 }
 
 .ending-kicker {
@@ -135,4 +197,12 @@ body {
     margin: 0;
     font-size: clamp(0.9rem, 1.5vw, 1rem);
     color: rgba(245, 232, 255, 0.58);
+}
+
+.ending-page.is-ended .love-overlay,
+.ending-page.is-ended .arrival-gate,
+.ending-page.is-ended .vignette,
+.ending-page.is-ended .vortex-canvas {
+    opacity: 0;
+    transition: opacity 1.6s ease;
 }
