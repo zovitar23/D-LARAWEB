@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Sora:wght@400;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 40%, rgba(224, 115, 255, 0.22), transparent 28%),
+        radial-gradient(circle at 30% 20%, rgba(132, 93, 255, 0.16), transparent 22%),
+        linear-gradient(180deg, #04010d 0%, #120322 38%, #24053b 100%);
+    font-family: 'Sora', sans-serif;
+    color: #fff;
+}
+
+.ending-page {
+    position: relative;
+    min-height: 100vh;
+    isolation: isolate;
+}
+
+.vortex-canvas,
+.vignette,
+.love-overlay,
+.ending-copy {
+    position: absolute;
+    inset: 0;
+}
+
+.vortex-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.vignette {
+    background:
+        radial-gradient(circle at center, transparent 0 38%, rgba(7, 2, 18, 0.24) 58%, rgba(3, 1, 12, 0.72) 100%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.02));
+    z-index: 2;
+    pointer-events: none;
+}
+
+.love-overlay {
+    z-index: 3;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.love-word {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    font-family: 'Cormorant Garamond', serif;
+    color: rgba(255, 236, 249, 0.92);
+    text-shadow:
+        0 0 14px rgba(255, 168, 234, 0.35),
+        0 0 28px rgba(185, 133, 255, 0.2);
+    opacity: 0;
+    will-change: transform, opacity;
+}
+
+.ending-copy {
+    z-index: 4;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 24px;
+    pointer-events: none;
+}
+
+.ending-kicker {
+    margin: 0 0 14px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 0.82rem;
+    color: rgba(255, 225, 246, 0.72);
+}
+
+.ending-copy h1 {
+    margin: 0;
+    font-size: clamp(3.2rem, 10vw, 7.2rem);
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+    text-shadow:
+        0 0 22px rgba(255, 180, 242, 0.46),
+        0 0 52px rgba(152, 104, 255, 0.28);
+    animation: titlePulse 6s ease-in-out infinite;
+}
+
+.ending-note {
+    margin: 18px 0 0;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(245, 232, 255, 0.78);
+}
+
+@keyframes titlePulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.92;
+    }
+    50% {
+        transform: scale(1.03);
+        opacity: 1;
+    }
+}
