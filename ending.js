@@ -7,6 +7,8 @@ const endingPage = document.querySelector('.ending-page');
 const endingReveal = document.getElementById('endingReveal');
 const endingQuote = document.getElementById('endingQuote');
 const spaceSection = document.getElementById('endingSpace');
+const spaceCanvas = document.getElementById('spaceCanvas');
+const spaceCtx = spaceCanvas.getContext('2d');
 const spacePhrase = document.getElementById('endingSpacePhrase');
 const spaceCamera = document.getElementById('endingSpaceCamera');
 
@@ -40,6 +42,9 @@ const JOURNEY_DURATION = 6;
 const REVEAL_TIME = 1;
 const warpLines = [];
 const warpRings = [];
+const spaceStars = [];
+const cameraState = { yaw: 0, pitch: 0, roll: 0, driftX: 0, driftY: 0 };
+const cameraTarget = { yaw: 0, pitch: 0, roll: 0, driftX: 0, driftY: 0 };
 let width = 0;
 let height = 0;
 let centerX = 0;
@@ -53,15 +58,20 @@ let quoteLineTwoTimeoutId = null;
 let spaceStartTimeoutId = null;
 let spacePhraseTimeoutId = null;
 let currentSpacePhraseIndex = 0;
+let spaceAnimationFrame = 0;
 
 const phraseAngles = [
-    { x: 27, y: 34, rotate: -3, scale: 0.96, exit: 'is-exiting-right', align: 'is-left' },
-    { x: 74, y: 39, rotate: 3, scale: 0.96, exit: 'is-exiting-left', align: 'is-right' },
-    { x: 25, y: 62, rotate: -2, scale: 1, exit: 'is-exiting-right', align: 'is-left' },
-    { x: 75, y: 59, rotate: 2.5, scale: 1, exit: 'is-exiting-left', align: 'is-right' },
-    { x: 33, y: 44, rotate: -1.5, scale: 0.98, exit: 'is-exiting-right', align: 'is-left' },
-    { x: 67, y: 54, rotate: 1.5, scale: 0.98, exit: 'is-exiting-left', align: 'is-right' },
+    { x: 26, y: 34, ry: -24, rx: 8, z: 140, exit: 'is-exiting-right', align: 'is-left', driftX: -1.05, driftY: -0.34, yaw: 11, pitch: -3.5, roll: -2.8 },
+    { x: 75, y: 39, ry: 22, rx: -4, z: 80, exit: 'is-exiting-left', align: 'is-right', driftX: 1.02, driftY: -0.18, yaw: -10.5, pitch: 2.6, roll: 2.4 },
+    { x: 24, y: 62, ry: -18, rx: 6, z: 110, exit: 'is-exiting-right', align: 'is-left', driftX: -0.92, driftY: 0.42, yaw: 8.8, pitch: 4.4, roll: -1.6 },
+    { x: 76, y: 60, ry: 24, rx: 5, z: 36, exit: 'is-exiting-left', align: 'is-right', driftX: 0.96, driftY: 0.28, yaw: -11.2, pitch: 4.8, roll: 2.6 },
+    { x: 33, y: 44, ry: -12, rx: -6, z: 76, exit: 'is-exiting-right', align: 'is-left', driftX: -0.58, driftY: -0.08, yaw: 5.4, pitch: -2.8, roll: -1.2 },
+    { x: 67, y: 54, ry: 14, rx: 7, z: 54, exit: 'is-exiting-left', align: 'is-right', driftX: 0.66, driftY: 0.14, yaw: -6.8, pitch: 3.2, roll: 1.5 },
 ];
+
+function lerp(start, end, amount) {
+    return start + (end - start) * amount;
+}
 
 function resizeCanvas() {
     width = window.innerWidth;
@@ -73,6 +83,12 @@ function resizeCanvas() {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+
+    spaceCanvas.width = width * devicePixelRatio;
+    spaceCanvas.height = height * devicePixelRatio;
+    spaceCanvas.style.width = `${width}px`;
+    spaceCanvas.style.height = `${height}px`;
+    spaceCtx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
 }
 
 function createWarpLine(z = Math.random()) {
@@ -104,6 +120,22 @@ function bootstrapScene() {
     for (let i = 0; i < 11; i += 1) {
         warpRings.push(createWarpRing(i / 11));
     }
+
+    for (let i = 0; i < 300; i += 1) {
+        spaceStars.push(createSpaceStar());
+    }
+}
+
+function createSpaceStar(z = Math.random()) {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 0.08 + Math.random() * 0.92;
+    return {
+        angle,
+        radius,
+        z,
+        speed: 0.0032 + Math.random() * 0.0074,
+        size: 0.55 + Math.random() * 1.35,
+    };
 }
 
 function drawBackgroundGlow(progress) {
@@ -308,6 +340,9 @@ function startEndingSpace() {
     endingQuote.classList.remove('is-visible', 'is-line-1', 'is-line-2');
     spaceSection.classList.add('is-visible');
     cycleSpacePhrase();
+    if (!spaceAnimationFrame) {
+        spaceAnimationFrame = requestAnimationFrame(drawSpaceScene);
+    }
 }
 
 function cycleSpacePhrase() {
@@ -329,16 +364,80 @@ function cycleSpacePhrase() {
         spacePhrase.textContent = phrase;
         spacePhrase.style.left = `${config.x}%`;
         spacePhrase.style.top = `${config.y}%`;
-        spacePhrase.style.transform = `translate(-50%, -50%) rotate(${config.rotate}deg) scale(${config.scale * 0.94})`;
-        spaceCamera.style.transform = 'none';
+        spacePhrase.style.transform = `translate3d(-50%, -50%, ${config.z}px) rotateY(${config.ry}deg) rotateX(${config.rx}deg) scale(0.7)`;
+
+        cameraTarget.yaw = config.yaw;
+        cameraTarget.pitch = config.pitch;
+        cameraTarget.roll = config.roll;
+        cameraTarget.driftX = config.driftX;
+        cameraTarget.driftY = config.driftY;
 
         spacePhrase.classList.add('is-visible');
         requestAnimationFrame(() => {
-            spacePhrase.style.transform = `translate(-50%, -50%) rotate(${config.rotate}deg) scale(${config.scale})`;
+            spacePhrase.style.transform = `translate3d(-50%, -50%, ${config.z}px) rotateY(${config.ry}deg) rotateX(${config.rx}deg) scale(1)`;
         });
         currentSpacePhraseIndex += 1;
         spacePhraseTimeoutId = setTimeout(cycleSpacePhrase, holdDuration);
     }, spacePhrase.textContent ? 420 : 0);
+}
+
+function drawSpaceScene() {
+    spaceCtx.clearRect(0, 0, width, height);
+
+    cameraState.yaw = lerp(cameraState.yaw, cameraTarget.yaw, 0.062);
+    cameraState.pitch = lerp(cameraState.pitch, cameraTarget.pitch, 0.062);
+    cameraState.roll = lerp(cameraState.roll, cameraTarget.roll, 0.06);
+    cameraState.driftX = lerp(cameraState.driftX, cameraTarget.driftX, 0.05);
+    cameraState.driftY = lerp(cameraState.driftY, cameraTarget.driftY, 0.05);
+
+    spaceCamera.style.transform = `
+        perspective(1800px)
+        rotateY(${cameraState.yaw}deg)
+        rotateX(${cameraState.pitch}deg)
+        rotateZ(${cameraState.roll}deg)
+        translate3d(${cameraState.driftX * -4.8}vw, ${cameraState.driftY * -3.6}vh, 0)
+    `;
+
+    const vanishingX = centerX + cameraState.driftX * width * 0.21;
+    const vanishingY = centerY + cameraState.driftY * height * 0.17;
+    const angleOffset = cameraState.yaw * 0.022;
+
+    for (const star of spaceStars) {
+        star.z -= star.speed;
+        if (star.z <= 0.02) {
+            Object.assign(star, createSpaceStar(1));
+        }
+
+        const perspective = 1 / Math.max(star.z, 0.05);
+        const travel = Math.pow(1 - star.z, 1.8);
+        const orbit = Math.min(width, height) * star.radius * 0.62;
+        const directionX = Math.cos(star.angle + angleOffset);
+        const directionY = Math.sin(star.angle + angleOffset);
+        const x = vanishingX + directionX * orbit * perspective;
+        const y = vanishingY + directionY * orbit * perspective * 0.94;
+        const trailPerspective = Math.max(0.22, perspective - (0.18 + travel * 0.2));
+        const tailX = vanishingX + directionX * orbit * trailPerspective;
+        const tailY = vanishingY + directionY * orbit * trailPerspective * 0.94;
+        const size = star.size * (0.32 + travel * 1.72);
+        const alpha = Math.min(0.98, 0.26 + travel * 0.72);
+
+        spaceCtx.beginPath();
+        spaceCtx.lineWidth = size;
+        spaceCtx.strokeStyle = `rgba(249, 241, 255, ${alpha})`;
+        spaceCtx.shadowBlur = 10 + travel * 14;
+        spaceCtx.shadowColor = `rgba(212, 168, 255, ${alpha * 0.58})`;
+        spaceCtx.moveTo(tailX, tailY);
+        spaceCtx.lineTo(x, y);
+        spaceCtx.stroke();
+
+        spaceCtx.beginPath();
+        spaceCtx.fillStyle = `rgba(255, 250, 255, ${Math.min(1, alpha + 0.08)})`;
+        spaceCtx.arc(x, y, size * 0.52, 0, Math.PI * 2);
+        spaceCtx.fill();
+    }
+
+    spaceCtx.shadowBlur = 0;
+    spaceAnimationFrame = requestAnimationFrame(drawSpaceScene);
 }
 
 resizeCanvas();
