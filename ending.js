@@ -20,8 +20,8 @@ const lovePhrases = [
     'Ik hou van jou',
 ];
 
-const JOURNEY_DURATION = 20;
-const REVEAL_TIME = 15;
+const JOURNEY_DURATION = 6;
+const REVEAL_TIME = 1;
 const warpLines = [];
 const warpRings = [];
 let width = 0;
@@ -77,26 +77,30 @@ function bootstrapScene() {
 
 function drawBackgroundGlow(progress) {
     const glow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(width, height) * 0.78);
-    glow.addColorStop(0, `rgba(126, 74, 224, ${0.12 + progress * 0.03})`);
-    glow.addColorStop(0.18, 'rgba(96, 44, 188, 0.1)');
+    glow.addColorStop(0, `rgba(126, 74, 224, ${0.12 + progress * 0.05})`);
+    glow.addColorStop(0.18, `rgba(96, 44, 188, ${0.1 + rushBoost(progress) * 0.14})`);
     glow.addColorStop(0.46, 'rgba(51, 15, 112, 0.08)');
     glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, width, height);
 }
 
+function rushBoost(progress) {
+    return Math.max(0, (progress - REVEAL_TIME / JOURNEY_DURATION) / (1 - REVEAL_TIME / JOURNEY_DURATION));
+}
+
 function drawWarpRings(progress, elapsed, rushPhase) {
     for (const ring of warpRings) {
-        ring.z -= ring.speed + progress * 0.004 + rushPhase * 0.03;
+        ring.z -= ring.speed + progress * 0.006 + rushPhase * 0.065;
         if (ring.z <= 0.035) {
             Object.assign(ring, createWarpRing(1));
         }
 
         const depth = 1 - ring.z;
         const perspective = 1 / Math.max(ring.z, 0.08);
-        const radius = Math.min(width, height) * (0.08 + rushPhase * 0.04) * perspective;
-        const alpha = Math.min(0.34, 0.02 + depth * 0.1 + rushPhase * 0.12);
-        const flatten = 0.9 + Math.sin(elapsed * 0.26 + ring.wobble) * (0.012 + rushPhase * 0.016);
+        const radius = Math.min(width, height) * (0.08 + rushPhase * 0.08) * perspective;
+        const alpha = Math.min(0.4, 0.02 + depth * 0.12 + rushPhase * 0.16);
+        const flatten = 0.9 + Math.sin(elapsed * 0.36 + ring.wobble) * (0.012 + rushPhase * 0.02);
 
         ctx.save();
         ctx.translate(centerX, centerY);
@@ -117,7 +121,7 @@ function drawWarpLines(progress, rushPhase) {
     const innerVoid = Math.min(width, height) * (0.12 + progress * 0.025 - rushPhase * 0.05);
 
     for (const line of warpLines) {
-        line.z -= line.speed + progress * 0.003 + rushPhase * 0.042;
+        line.z -= line.speed + progress * 0.004 + rushPhase * 0.09;
         if (line.z <= 0.02) {
             Object.assign(line, createWarpLine(1));
         }
@@ -125,17 +129,17 @@ function drawWarpLines(progress, rushPhase) {
         const depth = 1 - line.z;
         const perspective = 1 / Math.max(line.z, 0.06);
         const startRadius = innerVoid * (1.04 + line.z * 0.16) * line.spread;
-        const endRadius = startRadius * perspective * (1.3 + progress * 0.42 + rushPhase * 1.3);
+        const endRadius = startRadius * perspective * (1.45 + progress * 0.5 + rushPhase * 2.2);
         const x1 = centerX + Math.cos(line.angle) * startRadius;
         const y1 = centerY + Math.sin(line.angle) * startRadius * 0.96;
         const x2 = centerX + Math.cos(line.angle) * endRadius;
         const y2 = centerY + Math.sin(line.angle) * endRadius * 0.96;
-        const alpha = Math.min(0.9, 0.035 + depth * 0.38 + rushPhase * 0.24);
+        const alpha = Math.min(1, 0.035 + depth * 0.42 + rushPhase * 0.32);
 
         ctx.beginPath();
-        ctx.lineWidth = line.thickness * (0.3 + depth * 0.6 + rushPhase * 0.65);
+        ctx.lineWidth = line.thickness * (0.3 + depth * 0.65 + rushPhase * 1.1);
         ctx.strokeStyle = `hsla(${line.hue}, 100%, 80%, ${alpha})`;
-        ctx.shadowBlur = 8 + depth * 10 + rushPhase * 18;
+        ctx.shadowBlur = 8 + depth * 10 + rushPhase * 26;
         ctx.shadowColor = `hsla(${line.hue}, 100%, 72%, ${alpha * 0.65})`;
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
@@ -146,7 +150,7 @@ function drawWarpLines(progress, rushPhase) {
 }
 
 function drawCenterVoid(progress, rushPhase) {
-    const voidRadius = Math.min(width, height) * (0.13 - rushPhase * 0.05);
+    const voidRadius = Math.min(width, height) * (0.13 - rushPhase * 0.08);
     const aura = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, voidRadius * 2.2);
     aura.addColorStop(0, 'rgba(255, 255, 255, 0)');
     aura.addColorStop(0.24, `rgba(173, 112, 255, ${0.12 + progress * 0.03 + rushPhase * 0.16})`);
@@ -187,7 +191,7 @@ function drawTunnel(now) {
     drawWarpLines(progress, rushPhase);
     drawCenterVoid(progress, rushPhase);
 
-    if (progress > 0.72) {
+    if (progress > 0.45) {
         arrivalGate.classList.add('is-near');
         endingCopy.classList.add('is-arriving');
     }
@@ -196,7 +200,7 @@ function drawTunnel(now) {
         endingReveal.classList.add('is-target');
     }
 
-    if (progress > 0.95) {
+    if (progress > 0.86) {
         arrivalGate.classList.add('is-arrived');
     }
 
