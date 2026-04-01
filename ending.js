@@ -26,6 +26,9 @@ let centerX = 0;
 let centerY = 0;
 let animationStart = performance.now();
 
+const tunnelParticles = [];
+const streakCount = 280;
+
 function resizeCanvas() {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -38,63 +41,75 @@ function resizeCanvas() {
     ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
 }
 
+function createParticle(randomZ = true) {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.random() * 0.95 + 0.05;
+    return {
+        angle,
+        radius,
+        z: randomZ ? Math.random() : 1,
+        speed: 0.004 + Math.random() * 0.009,
+        size: 0.8 + Math.random() * 2.8,
+        hue: 280 + Math.random() * 60,
+        sway: (Math.random() - 0.5) * 0.65,
+    };
+}
+
+function ensureParticles() {
+    if (tunnelParticles.length) return;
+    for (let i = 0; i < streakCount; i += 1) {
+        tunnelParticles.push(createParticle());
+    }
+}
+
 function drawTunnel(now) {
     const elapsed = (now - animationStart) / 1000;
     const introBoost = Math.max(0, 1 - elapsed / 20);
-    const travelSpeed = 0.42 + introBoost * 0.45;
+    const travelSpeed = 0.016 + introBoost * 0.02;
 
     ctx.clearRect(0, 0, width, height);
+    ensureParticles();
 
     const background = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(width, height) * 0.62);
-    background.addColorStop(0, 'rgba(113, 48, 245, 0.26)');
-    background.addColorStop(0.38, 'rgba(43, 7, 102, 0.16)');
+    background.addColorStop(0, 'rgba(136, 66, 252, 0.24)');
+    background.addColorStop(0.28, 'rgba(80, 17, 172, 0.12)');
     background.addColorStop(1, 'rgba(4, 1, 13, 0)');
     ctx.fillStyle = background;
     ctx.fillRect(0, 0, width, height);
 
-    for (let i = 0; i < 160; i += 1) {
-        const depthSeed = ((i / 160) + elapsed * travelSpeed) % 1;
-        const depth = 1 - depthSeed;
-        const perspective = Math.pow(depth, 1.75);
-        const radius = 28 + perspective * Math.min(width, height) * 0.56;
-        const angle = elapsed * 0.72 + i * 0.18 + depth * 16;
-        const swirl = 1 + Math.sin(elapsed * 0.55 + i * 0.4) * 0.16;
-        const x = centerX + Math.cos(angle) * radius * swirl;
-        const y = centerY + Math.sin(angle) * radius * 0.78 * swirl;
-        const size = 0.8 + perspective * 5.6;
-        const alpha = 0.08 + perspective * 0.62;
+    for (const particle of tunnelParticles) {
+        particle.z -= particle.speed + introBoost * 0.0025;
+        if (particle.z <= 0.02) {
+            Object.assign(particle, createParticle(false), { z: 1 });
+        }
+
+        const depth = 1 - particle.z;
+        const perspective = 1 / Math.max(particle.z, 0.04);
+        const orbit = particle.angle + elapsed * particle.sway;
+        const tunnelRadius = (particle.radius * Math.min(width, height) * 0.21 + 12) * perspective;
+        const x = centerX + Math.cos(orbit) * tunnelRadius;
+        const y = centerY + Math.sin(orbit) * tunnelRadius * 0.78;
+        const tailX = centerX + Math.cos(orbit) * tunnelRadius * 0.72;
+        const tailY = centerY + Math.sin(orbit) * tunnelRadius * 0.72 * 0.78;
+        const alpha = Math.min(0.95, 0.08 + depth * 0.95);
+        const lineWidth = 0.5 + particle.size * depth * 0.85;
 
         ctx.beginPath();
-        ctx.fillStyle = `rgba(255, ${180 + Math.floor(perspective * 55)}, 247, ${alpha})`;
-        ctx.shadowBlur = 24 + perspective * 26;
-        ctx.shadowColor = `rgba(182, 118, 255, ${alpha})`;
-        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.strokeStyle = `hsla(${particle.hue}, 95%, 78%, ${alpha})`;
+        ctx.lineWidth = lineWidth;
+        ctx.shadowBlur = 16 + depth * 16;
+        ctx.shadowColor = `hsla(${particle.hue}, 95%, 72%, ${alpha})`;
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.fillStyle = `hsla(${particle.hue}, 100%, 86%, ${Math.min(1, alpha + 0.08)})`;
+        ctx.arc(x, y, 0.7 + particle.size * depth * 0.55, 0, Math.PI * 2);
         ctx.fill();
     }
 
     ctx.shadowBlur = 0;
-
-    for (let ring = 0; ring < 24; ring += 1) {
-        const z = ((ring / 24) + elapsed * travelSpeed * 0.22) % 1;
-        const depth = 1 - z;
-        const perspective = Math.pow(depth, 2.15);
-        const radius = perspective * Math.min(width, height) * 0.52;
-        const rotation = elapsed * 0.36 + ring * 0.23;
-        const alpha = 0.04 + perspective * 0.14;
-
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(rotation);
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(255, 196, 245, ${alpha})`;
-        ctx.lineWidth = 1.1 + perspective * 1.8;
-        ctx.shadowBlur = 20;
-        ctx.shadowColor = `rgba(156, 96, 255, ${alpha})`;
-        ctx.ellipse(0, 0, radius, radius * 0.72, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-    }
-
     requestAnimationFrame(drawTunnel);
 }
 
@@ -131,7 +146,6 @@ function startLoveWords() {
     for (let i = 0; i < 8; i += 1) {
         setTimeout(spawnLoveWord, i * 260);
     }
-
     setInterval(spawnLoveWord, 1100);
 }
 

@@ -10,9 +10,9 @@ body {
     min-height: 100%;
     overflow: hidden;
     background:
-        radial-gradient(circle at 50% 40%, rgba(224, 115, 255, 0.22), transparent 28%),
-        radial-gradient(circle at 30% 20%, rgba(132, 93, 255, 0.16), transparent 22%),
-        linear-gradient(180deg, #04010d 0%, #120322 38%, #24053b 100%);
+        radial-gradient(circle at 50% 52%, rgba(158, 88, 255, 0.24), transparent 24%),
+        radial-gradient(circle at 50% 50%, rgba(255, 140, 230, 0.12), transparent 18%),
+        linear-gradient(180deg, #03010b 0%, #10021d 35%, #220439 100%);
     font-family: 'Sora', sans-serif;
     color: #fff;
 }
@@ -39,7 +39,7 @@ body {
 
 .vignette {
     background:
-        radial-gradient(circle at center, transparent 0 38%, rgba(7, 2, 18, 0.24) 58%, rgba(3, 1, 12, 0.72) 100%),
+        radial-gradient(circle at center, transparent 0 30%, rgba(7, 2, 18, 0.18) 50%, rgba(3, 1, 12, 0.78) 100%),
         linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.02));
     z-index: 2;
     pointer-events: none;
@@ -59,8 +59,8 @@ body {
     font-family: 'Cormorant Garamond', serif;
     color: rgba(255, 236, 249, 0.92);
     text-shadow:
-        0 0 14px rgba(255, 168, 234, 0.35),
-        0 0 28px rgba(185, 133, 255, 0.2);
+        0 0 14px rgba(255, 168, 234, 0.28),
+        0 0 28px rgba(185, 133, 255, 0.18);
     opacity: 0;
     will-change: transform, opacity;
 }
@@ -88,8 +88,8 @@ body {
     line-height: 0.95;
     letter-spacing: 0.04em;
     text-shadow:
-        0 0 22px rgba(255, 180, 242, 0.46),
-        0 0 52px rgba(152, 104, 255, 0.28);
+        0 0 22px rgba(255, 180, 242, 0.4),
+        0 0 52px rgba(152, 104, 255, 0.24);
     animation: titlePulse 6s ease-in-out infinite;
 }
 
