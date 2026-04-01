@@ -40,9 +40,8 @@ const spacePhrases = [
 
 const JOURNEY_DURATION = 6;
 const REVEAL_TIME = 1;
-const warpLines = [];
-const warpRings = [];
 const spaceStars = [];
+const introDust = [];
 const cameraState = { yaw: 0, pitch: 0, roll: 0, driftX: 0, driftY: 0 };
 const cameraTarget = { yaw: 0, pitch: 0, roll: 0, driftX: 0, driftY: 0 };
 let width = 0;
@@ -78,6 +77,7 @@ function resizeCanvas() {
     height = window.innerHeight;
     centerX = width / 2;
     centerY = height / 2;
+
     canvas.width = width * devicePixelRatio;
     canvas.height = height * devicePixelRatio;
     canvas.style.width = `${width}px`;
@@ -89,41 +89,6 @@ function resizeCanvas() {
     spaceCanvas.style.width = `${width}px`;
     spaceCanvas.style.height = `${height}px`;
     spaceCtx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-}
-
-function createWarpLine(z = Math.random()) {
-    return {
-        angle: Math.random() * Math.PI * 2,
-        z,
-        speed: 0.012 + Math.random() * 0.018,
-        thickness: 0.7 + Math.random() * 1.9,
-        hue: 272 + Math.random() * 24,
-        spread: 0.88 + Math.random() * 0.28,
-    };
-}
-
-function createWarpRing(z = Math.random()) {
-    return {
-        z,
-        speed: 0.013 + Math.random() * 0.008,
-        wobble: Math.random() * Math.PI * 2,
-    };
-}
-
-function bootstrapScene() {
-    if (warpLines.length) return;
-
-    for (let i = 0; i < 220; i += 1) {
-        warpLines.push(createWarpLine());
-    }
-
-    for (let i = 0; i < 11; i += 1) {
-        warpRings.push(createWarpRing(i / 11));
-    }
-
-    for (let i = 0; i < 300; i += 1) {
-        spaceStars.push(createSpaceStar());
-    }
 }
 
 function createSpaceStar(z = Math.random()) {
@@ -138,121 +103,69 @@ function createSpaceStar(z = Math.random()) {
     };
 }
 
+function createIntroDust() {
+    return {
+        x: Math.random(),
+        y: Math.random(),
+        size: 1 + Math.random() * 3.2,
+        alpha: 0.04 + Math.random() * 0.1,
+        driftX: (Math.random() - 0.5) * 0.00018,
+        driftY: (Math.random() - 0.5) * 0.00018,
+        pulse: Math.random() * Math.PI * 2,
+    };
+}
+
+function bootstrapScene() {
+    if (!spaceStars.length) {
+        for (let i = 0; i < 300; i += 1) {
+            spaceStars.push(createSpaceStar());
+        }
+    }
+
+    if (!introDust.length) {
+        for (let i = 0; i < 42; i += 1) {
+            introDust.push(createIntroDust());
+        }
+    }
+}
+
 function drawBackgroundGlow(progress) {
     const glow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(width, height) * 0.78);
-    glow.addColorStop(0, `rgba(126, 74, 224, ${0.12 + progress * 0.05})`);
-    glow.addColorStop(0.18, `rgba(96, 44, 188, ${0.1 + rushBoost(progress) * 0.14})`);
-    glow.addColorStop(0.46, 'rgba(51, 15, 112, 0.08)');
+    glow.addColorStop(0, `rgba(126, 74, 224, ${0.1 + progress * 0.04})`);
+    glow.addColorStop(0.18, `rgba(96, 44, 188, ${0.08 + progress * 0.04})`);
+    glow.addColorStop(0.46, 'rgba(51, 15, 112, 0.07)');
     glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, width, height);
 }
 
-function rushBoost(progress) {
-    return Math.max(0, (progress - REVEAL_TIME / JOURNEY_DURATION) / (1 - REVEAL_TIME / JOURNEY_DURATION));
-}
-
-function drawWarpRings(progress, elapsed, rushPhase) {
-    for (const ring of warpRings) {
-        ring.z -= ring.speed + progress * 0.006 + rushPhase * 0.065;
-        if (ring.z <= 0.035) {
-            Object.assign(ring, createWarpRing(1));
-        }
-
-        const depth = 1 - ring.z;
-        const perspective = 1 / Math.max(ring.z, 0.08);
-        const radius = Math.min(width, height) * (0.08 + rushPhase * 0.08) * perspective;
-        const alpha = Math.min(0.4, 0.02 + depth * 0.12 + rushPhase * 0.16);
-        const flatten = 0.9 + Math.sin(elapsed * 0.36 + ring.wobble) * (0.012 + rushPhase * 0.02);
-
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.beginPath();
-        ctx.lineWidth = 0.8 + depth * 0.9 + rushPhase * 0.8;
-        ctx.strokeStyle = `rgba(236, 221, 255, ${alpha})`;
-        ctx.shadowBlur = 8 + rushPhase * 12;
-        ctx.shadowColor = `rgba(189, 132, 255, ${alpha * 0.55})`;
-        ctx.ellipse(0, 0, radius, radius * flatten, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.restore();
-    }
-
-    ctx.shadowBlur = 0;
-}
-
-function drawWarpLines(progress, rushPhase) {
-    const innerVoid = Math.min(width, height) * (0.12 + progress * 0.025 - rushPhase * 0.05);
-
-    for (const line of warpLines) {
-        line.z -= line.speed + progress * 0.004 + rushPhase * 0.09;
-        if (line.z <= 0.02) {
-            Object.assign(line, createWarpLine(1));
-        }
-
-        const depth = 1 - line.z;
-        const perspective = 1 / Math.max(line.z, 0.06);
-        const startRadius = innerVoid * (1.04 + line.z * 0.16) * line.spread;
-        const endRadius = startRadius * perspective * (1.45 + progress * 0.5 + rushPhase * 2.2);
-        const x1 = centerX + Math.cos(line.angle) * startRadius;
-        const y1 = centerY + Math.sin(line.angle) * startRadius * 0.96;
-        const x2 = centerX + Math.cos(line.angle) * endRadius;
-        const y2 = centerY + Math.sin(line.angle) * endRadius * 0.96;
-        const alpha = Math.min(1, 0.035 + depth * 0.42 + rushPhase * 0.32);
-
-        ctx.beginPath();
-        ctx.lineWidth = line.thickness * (0.3 + depth * 0.65 + rushPhase * 1.1);
-        ctx.strokeStyle = `hsla(${line.hue}, 100%, 80%, ${alpha})`;
-        ctx.shadowBlur = 8 + depth * 10 + rushPhase * 26;
-        ctx.shadowColor = `hsla(${line.hue}, 100%, 72%, ${alpha * 0.65})`;
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-    }
-
-    ctx.shadowBlur = 0;
-}
-
-function drawCenterVoid(progress, rushPhase) {
-    const voidRadius = Math.min(width, height) * (0.13 - rushPhase * 0.08);
-    const aura = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, voidRadius * 2.2);
-    aura.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    aura.addColorStop(0.24, `rgba(173, 112, 255, ${0.12 + progress * 0.03 + rushPhase * 0.16})`);
-    aura.addColorStop(0.48, `rgba(89, 34, 169, ${0.12 + rushPhase * 0.08})`);
-    aura.addColorStop(1, 'rgba(89, 34, 169, 0)');
-    ctx.fillStyle = aura;
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.beginPath();
-    ctx.lineWidth = 2 + rushPhase * 1.6;
-    ctx.strokeStyle = `rgba(237, 215, 255, ${0.16 + progress * 0.05 + rushPhase * 0.22})`;
-    ctx.shadowBlur = 18 + rushPhase * 18;
-    ctx.shadowColor = 'rgba(191, 132, 255, 0.2)';
-    ctx.arc(centerX, centerY, voidRadius * 0.94, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-
-    const voidGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, voidRadius * 1.25);
-    voidGradient.addColorStop(0, 'rgba(1, 0, 6, 1)');
-    voidGradient.addColorStop(0.58, 'rgba(10, 3, 23, 0.98)');
-    voidGradient.addColorStop(0.86, 'rgba(37, 11, 72, 0.38)');
-    voidGradient.addColorStop(1, 'rgba(37, 11, 72, 0)');
-    ctx.fillStyle = voidGradient;
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, voidRadius * 1.25, 0, Math.PI * 2);
-    ctx.fill();
-}
-
 function drawPreludeAtmosphere(elapsed, progress) {
-    const glowX = centerX + Math.cos(elapsed * 0.4) * width * 0.035;
+    const glowX = centerX + Math.cos(elapsed * 0.42) * width * 0.035;
     const glowY = centerY + Math.sin(elapsed * 0.3) * height * 0.03;
-    const pulse = (Math.sin(elapsed * 1.15) + 1) * 0.5;
-    const aura = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, Math.max(width, height) * 0.34);
-    aura.addColorStop(0, `rgba(164, 108, 255, ${0.12 + pulse * 0.06})`);
-    aura.addColorStop(0.32, `rgba(118, 58, 214, ${0.08 + progress * 0.03})`);
-    aura.addColorStop(0.72, 'rgba(58, 16, 126, 0.04)');
+    const pulse = (Math.sin(elapsed * 1.1) + 1) * 0.5;
+    const aura = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, Math.max(width, height) * 0.36);
+    aura.addColorStop(0, `rgba(165, 109, 255, ${0.12 + pulse * 0.06})`);
+    aura.addColorStop(0.34, `rgba(118, 58, 214, ${0.08 + progress * 0.03})`);
+    aura.addColorStop(0.72, 'rgba(58, 16, 126, 0.03)');
     aura.addColorStop(1, 'rgba(58, 16, 126, 0)');
     ctx.fillStyle = aura;
     ctx.fillRect(0, 0, width, height);
+
+    for (const dot of introDust) {
+        dot.x += dot.driftX;
+        dot.y += dot.driftY;
+
+        if (dot.x < -0.05) dot.x = 1.05;
+        if (dot.x > 1.05) dot.x = -0.05;
+        if (dot.y < -0.05) dot.y = 1.05;
+        if (dot.y > 1.05) dot.y = -0.05;
+
+        const alpha = dot.alpha + ((Math.sin(elapsed * 0.9 + dot.pulse) + 1) * 0.5) * 0.05;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(236, 220, 255, ${alpha})`;
+        ctx.arc(dot.x * width, dot.y * height, dot.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
 }
 
 function drawTunnel(now) {
@@ -260,6 +173,7 @@ function drawTunnel(now) {
     const progress = Math.min(elapsed / JOURNEY_DURATION, 1);
 
     ctx.clearRect(0, 0, width, height);
+    bootstrapScene();
     drawBackgroundGlow(progress);
     drawPreludeAtmosphere(elapsed, progress);
 
