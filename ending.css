@@ -290,6 +290,7 @@ body {
     gap: 18px;
     max-width: min(92vw, 1100px);
     opacity: 1;
+    text-align: center;
 }
 
 .ending-quote__line {
@@ -307,11 +308,15 @@ body {
 .ending-quote__line--dark {
     background: transparent;
     color: #fff;
+    position: relative;
+    z-index: 2;
 }
 
 .ending-quote__line--light {
     background: transparent;
     color: #000;
+    position: relative;
+    z-index: 2;
 }
 
 .ending-quote.is-visible {
